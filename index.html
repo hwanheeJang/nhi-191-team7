@@ -248,6 +248,38 @@ header.mast{position:sticky; top:0; z-index:30;
   background:var(--paper); color:var(--ink); border:1px solid var(--rule); border-radius:3px; padding:9px 11px}
 .idbar select:focus{outline:2px solid var(--accent); outline-offset:-1px}
 
+/* ───── 주제 투표 ───── */
+.finalbox{margin-top:16px; background:var(--ok-soft); border:1px solid color-mix(in srgb, var(--ok) 35%, transparent);
+  border-left:3px solid var(--ok); border-radius:3px; padding:13px 15px}
+.finalbox .l{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--ok); font-weight:600}
+.finalbox h3{margin:3px 0 0; font-size:17px; font-weight:700; color:var(--ink); letter-spacing:-.015em}
+
+.topic{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  padding:14px 15px; box-shadow:var(--shadow); margin-bottom:11px; border-left:3px solid var(--rule)}
+.topic.mine{border-left-color:var(--accent)}
+.topic.won{border-left-color:var(--ok)}
+.topic-top{display:flex; align-items:center; gap:9px; margin-bottom:4px}
+.topic-code{font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; letter-spacing:.06em;
+  background:var(--surface-2); color:var(--muted); border:1px solid var(--rule-soft); padding:2px 8px; border-radius:2px}
+.votecount{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:600;
+  font-variant-numeric:tabular-nums; color:var(--muted)}
+.votecount.hot{color:var(--accent)}
+.topic h3{margin:0 0 8px; font-size:16.5px; font-weight:700; letter-spacing:-.015em; line-height:1.38}
+.kw{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px}
+.kw span{font-size:11.5px; background:var(--surface-2); color:var(--muted);
+  border:1px solid var(--rule-soft); border-radius:99px; padding:3px 9px}
+.tline{display:grid; grid-template-columns:76px 1fr; gap:9px; font-size:13px; padding:5px 0;
+  border-top:1px solid var(--rule-soft)}
+.tline b{color:var(--muted); font-weight:600; font-size:12px}
+.tline span{color:var(--ink-2)}
+.tline.pro span{color:var(--ok)} .tline.con span{color:var(--urgent)}
+.votebar{height:6px; border-radius:99px; background:var(--rule-soft); overflow:hidden; margin:11px 0 9px}
+.votebar i{display:block; height:100%; background:var(--accent)}
+.voters{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:11px; min-height:4px}
+.voters span{font-size:12px; background:var(--accent-soft); color:var(--accent); border-radius:99px; padding:3px 9px; font-weight:600}
+.note-plain{margin-top:16px; background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  padding:12px 14px; font-size:12.8px; color:var(--ink-2); line-height:1.6}
+
 .pending-list{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
 .pending-list span{font-size:12px; background:var(--urgent-soft); color:var(--urgent);
   border-radius:99px; padding:4px 10px; font-weight:600}
@@ -273,11 +305,31 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
       <div class="live" id="livewrap" hidden><span class="dot-live off" id="dot"></span><span id="livetxt">연결 중</span></div>
     </div>
     <div class="vtabs" role="tablist">
-      <button class="vtab" role="tab" id="vt-cal" aria-selected="true" aria-controls="view-cal">일정</button>
+      <button class="vtab" role="tab" id="vt-topic" aria-selected="true" aria-controls="view-topic">주제</button>
+      <button class="vtab" role="tab" id="vt-cal" aria-selected="false" aria-controls="view-cal">일정</button>
       <button class="vtab" role="tab" id="vt-role" aria-selected="false" aria-controls="view-role">역할</button>
     </div>
   </div>
 </header>
+
+<!-- ══════════ 주제 ══════════ -->
+<div class="wrap" id="view-topic" role="tabpanel" aria-labelledby="vt-topic">
+  <div class="finalbox" id="finalbox" hidden></div>
+
+  <div class="mecard" style="margin-top:16px">
+    <h2>투표 현황</h2>
+    <div class="who" id="voteWho">아직 아무도 투표하지 않았습니다.</div>
+    <div class="pending-list" id="voteePending"></div>
+  </div>
+
+  <div class="sec-head"><h2>세 후보 중 하나를 골라주세요</h2><span id="voteDue">~9.18(금)</span></div>
+  <div id="topicList"></div>
+
+  <div class="note-plain">
+    한 사람이 하나만 고를 수 있고, 언제든 바꿀 수 있습니다. 최종 확정은 분임장·연구장이 합니다.
+    아래 ‘우리 분임 관련 부처’는 명단의 소속 열을 집계한 것으로, 그 주제를 업무로 다뤄본 사람이 몇 명인지를 뜻합니다.
+  </div>
+</div>
 
 <!-- ══════════ 일정 ══════════ -->
 <div class="wrap" id="view-cal" role="tabpanel" aria-labelledby="vt-cal">
@@ -387,14 +439,16 @@ var EVENTS = [
     ],
     kakao:"[7분임] 9.18(금) 16:00\nAI Tool 구매 (분임별 1개, 3만원 내)\n- 영수증 내면 실비 정산\n- 가족공유 되는 Gemini 권장\n  (공유 여부가 협업평가에 반영)" },
 
-  { m:9, d:19, t:"", kind:"self", who:"분임 전원", pts:"자체 목표",
+  { m:9, d:18, t:"", kind:"self", who:"분임 전원", pts:"자체 목표",
     title:"연구주제 확정 (54 / 84 / 107 중 1개)",
     items:[
-      "방문지 섭외가 주제에 달려 있어 이것부터 정해야 합니다.",
+      "계획서 마감이 <b>9.22(화) 오전 9시</b>라, 사실상 9.21(월) 밤까지 완성해야 합니다. 주말에 초안을 잡으려면 금요일에는 주제가 정해져 있어야 합니다.",
+      "방문지·봉사기관 섭외도 주제가 정해져야 시작할 수 있습니다.",
       "후보: 54 소멸위기지역 재도약 / 84 필수의료·공공의료 강화 / 107 관광산업 기반 구축.",
-      "배점이 큰 항목은 방향성 25점과 실용성 20점 — <b>대안을 얼마나 구체적으로 쓰느냐</b>가 점수를 가릅니다."
+      "배점이 큰 항목은 방향성 25점과 실용성 20점 — <b>대안을 얼마나 구체적으로 쓰느냐</b>가 점수를 가릅니다.",
+      "상황판 <b>주제 탭</b>에서 투표하시면 됩니다."
     ],
-    kakao:"[7분임] 주제 확정 요청 (~9.19)\n54 소멸위기지역 / 84 필수의료 / 107 관광\n이 중 하나로 정해야 방문지 섭외가 시작됩니다.\n의견 부탁드립니다." },
+    kakao:"[7분임] 주제 확정 요청 (~9.18 금)\n54 소멸위기지역 / 84 필수의료 / 107 관광\n\n상황판 '주제' 탭에서 하나 골라주세요.\n계획서 마감이 9.22(화) 오전 9시라\n주말에 초안을 쓰려면 금요일엔\n정해져 있어야 합니다.\n\n※ 공식 마감은 아니고 우리 분임 자체 목표입니다." },
 
   { m:9, d:22, t:"09:00", kind:"due", who:"연구장 제출", pts:"P/F 2점",
     title:"분임 정책연구계획서 제출",
@@ -556,6 +610,36 @@ var ROLES = [
    d:"봉사기관 섭외(19명 수용 확인)와 현장 기록. 활동 전·후 단체사진 증빙 책임."}
 ];
 var TEAMS = ["연구조사반","보고서집필반","AI·편집반","현장운영반"];
+
+/* ═══════════ 정책연구 주제 후보 ═══════════ */
+var TOPICS = [
+  { id:"t54", code:"국정과제 54",
+    title:"소멸위기지역 재도약을 위한 지원 강화",
+    kw:["인구감소지역 89곳","지방소멸대응기금","생활인구","고향사랑기부제","빈집·유휴공간"],
+    inside:"3명 (농림축산식품부 1, 농촌진흥청 2)",
+    visit:"괴산군청 + 산촌 청년창업특구 — 편도 40분",
+    vol:"괴산 농촌 일손돕기 (10월 초 수확기)",
+    pro:"방문지가 가장 가깝고 담당자 인터뷰가 현실적. 기금 집행 자료와 통계가 풍부.",
+    con:"이미 나온 대책이 많아 차별화된 대안을 내기가 부담." },
+
+  { id:"t84", code:"국정과제 84",
+    title:"지역격차 해소, 필수의료 확충, 공공의료 강화",
+    kw:["지역완결형 필수의료","권역책임의료기관","지방의료원","분만·소아·응급","지역필수의사제"],
+    inside:"1명 (질병관리청)",
+    visit:"충북대병원 권역외상센터 + 청주의료원 — 편도 40분",
+    vol:"노인복지관 배식·말벗",
+    pro:"사회적 중요도가 높고 현장 인터뷰의 설득력이 큼.",
+    con:"의료계 갈등과 재정 변수가 커서 6쪽 안에 실현 가능한 대안을 담기 가장 어려움. 고른다면 분만·소아·응급 중 하나로 좁혀야 함." },
+
+  { id:"t107", code:"국정과제 107",
+    title:"3천만 세계인이 찾는 관광산업 기반 구축",
+    kw:["수도권 편중 완화","관광교통 접근성","체류형·워케이션","K-컬처 연계","수용태세 개선"],
+    inside:"3명 (문화체육관광부)",
+    visit:"청주국제공항 + 청주 스마트관광도시 — 편도 30~40분",
+    vol:"원도심 관광지 환경정비·관광안내",
+    pro:"법령 개정·수용태세 등 각론이 많아 구체적인 대안을 쓰기 유리. 주무부처가 분임 안에 있어 섭외와 자료 접근이 수월. AI 검증 실적도 쌓기 쉬움.",
+    con:"관광은 지자체마다 사업이 많아 ‘또 하나의 활성화 방안’이 되지 않도록 문제 정의를 날카롭게 잡아야 함." }
+];
 
 /* ═══════════ 7분임 명단 ═══════════ */
 var MEMBERS = [
@@ -796,21 +880,21 @@ function setLive(state, text){
 function hhmm(){ var d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 
 function pull(){
-  if (!HAS_API){ rows = load(LS.local) || []; renderBoard(); return Promise.resolve(); }
+  if (!HAS_API){ rows = load(LS.local) || []; renderAll(); return Promise.resolve(); }
   return fetch(API + "?t=" + Date.now(), { method:"GET" })
     .then(function(r){ return r.json(); })
-    .then(function(j){ rows = (j && j.rows) || []; setLive("ok", "실시간 " + hhmm()); renderBoard(); })
+    .then(function(j){ rows = (j && j.rows) || []; setLive("ok", "실시간 " + hhmm()); renderAll(); })
     .catch(function(){ setLive("err", "연결 끊김"); });
 }
 function push(action, payload){
-  if (!HAS_API){ applyLocal(action, payload); save(LS.local, rows); renderBoard(); return Promise.resolve(); }
+  if (!HAS_API){ applyLocal(action, payload); save(LS.local, rows); renderAll(); return Promise.resolve(); }
   if (busy) return Promise.resolve();
   busy = true;
   return fetch(API, { method:"POST", body: JSON.stringify({ action:action, payload:payload }) })
     .then(function(r){ return r.json(); })
     .then(function(j){
       busy = false;
-      if (j && j.rows){ rows = j.rows; setLive("ok","실시간 " + hhmm()); renderBoard(); }
+      if (j && j.rows){ rows = j.rows; setLive("ok","실시간 " + hhmm()); renderAll(); }
       else return pull();
     })
     .catch(function(){ busy = false; setLive("err","저장 실패"); toast("저장에 실패했습니다. 다시 시도해 주세요."); });
@@ -821,7 +905,16 @@ function applyLocal(action, p){
   else if (action === "confirm") rows.forEach(function(r){ if (r.id === p.id) r.status = "conf"; });
   else if (action === "unconfirm") rows.forEach(function(r){ if (r.id === p.id) r.status = "want"; });
 }
-function byRole(id){ return rows.filter(function(r){ return r.roleId === id; }); }
+/* 같은 시트를 함께 쓰므로 roleId 앞머리로 구분합니다.
+   "vote:..." 는 주제 투표, "final:..." 은 확정 주제, 나머지는 역할 신청입니다. */
+function isVote(r){ return String(r.roleId).indexOf("vote:") === 0; }
+function isFinal(r){ return String(r.roleId).indexOf("final:") === 0; }
+function roleRows(){ return rows.filter(function(r){ return !isVote(r) && !isFinal(r); }); }
+function voteRows(){ return rows.filter(isVote); }
+function finalRow(){ return rows.filter(isFinal)[0] || null; }
+function finalTopicId(){ var f = finalRow(); return f ? String(f.roleId).slice(6) : null; }
+
+function byRole(id){ return roleRows().filter(function(r){ return r.roleId === id; }); }
 // 교번은 앞자리 0 유무가 갈릴 수 있어 정규화해서 비교합니다.
 function normGb(v){ return String(v == null ? "" : v).trim().replace(/^0+(?=.)/, ""); }
 function isMine(r){ return me && r.name === me.name && normGb(r.gb) === normGb(me.gb); }
@@ -856,7 +949,7 @@ function renderBoard(){
 
   // 아직 아무 역할도 신청하지 않은 분임원
   var applied = {};
-  rows.forEach(function(r){ applied[normGb(r.gb)] = 1; });
+  roleRows().forEach(function(r){ applied[normGb(r.gb)] = 1; });
   var notYet = MEMBERS.filter(function(m){ return !applied[normGb(m.gb)]; });
   document.getElementById("pendingWho").textContent =
     notYet.length ? MEMBERS.length - notYet.length + " / " + MEMBERS.length + "명 신청 완료"
@@ -938,35 +1031,124 @@ memberSel.innerHTML = '<option value="">이름을 골라 주세요</option>' +
   MEMBERS.map(function(m){ return '<option value="' + m.gb + '">' + esc(m.gb + " " + m.name) + "</option>"; }).join("");
 memberSel.addEventListener("change", function(){
   var g = memberSel.value;
-  if (!g){ me = null; save(LS.me, null); renderBoard(); return; }
+  if (!g){ me = null; save(LS.me, null); renderAll(); return; }
   var m = MEMBERS.filter(function(x){ return x.gb === g; })[0];
   me = { name:m.name, gb:m.gb };
   save(LS.me, me);
-  toast(m.name + "님으로 설정했습니다. 이제 역할을 신청하세요.");
-  renderBoard();
+  toast(m.name + "님으로 설정했습니다.");
+  renderAll();
 });
 document.getElementById("btn-refresh").addEventListener("click", function(){ pull(); });
 
+function renderAll(){ renderBoard(); renderTopics(); }
+
+/* ═══════════ 주제 투표 ═══════════ */
+function votesFor(tid){ return voteRows().filter(function(r){ return String(r.roleId).slice(5) === tid; }); }
+function myVote(){ return voteRows().filter(isMine)[0] || null; }
+
+function castVote(tid){
+  if (!me){ toast("먼저 화면 아래에서 본인 이름을 골라 주세요."); return; }
+  var prev = myVote();
+  var add = function(){ return push("add", { roleId:"vote:" + tid, name:me.name, gb:me.gb }); };
+  if (prev){
+    if (String(prev.roleId).slice(5) === tid){ toast("이미 이 주제를 고르셨습니다."); return; }
+    push("remove", { id: prev.id }).then(add);
+  } else add();
+  toast("선택했습니다. 언제든 바꿀 수 있습니다.");
+}
+function setFinal(tid){
+  var f = finalRow();
+  var add = function(){ return push("add", { roleId:"final:" + tid, name:"확정", gb:"-" }); };
+  if (f){
+    if (String(f.roleId).slice(6) === tid){ push("remove", { id:f.id }); toast("확정을 해제했습니다."); return; }
+    push("remove", { id:f.id }).then(add);
+  } else add();
+  toast("이 주제로 확정했습니다.");
+}
+
+function renderTopics(){
+  var fin = finalTopicId();
+  var box = document.getElementById("finalbox");
+  if (fin){
+    var t = TOPICS.filter(function(x){ return x.id === fin; })[0];
+    box.hidden = false;
+    box.innerHTML = '<div class="l">확정된 연구주제</div><h3>' + esc(t ? t.code + " · " + t.title : fin) + "</h3>";
+  } else box.hidden = true;
+
+  var voted = {}, total = 0;
+  voteRows().forEach(function(r){ voted[normGb(r.gb)] = 1; total++; });
+  var notYet = MEMBERS.filter(function(m){ return !voted[normGb(m.gb)]; });
+  document.getElementById("voteWho").textContent =
+    (MEMBERS.length - notYet.length) + " / " + MEMBERS.length + "명 투표 완료" +
+    (notYet.length ? " · 아직 안 한 사람" : "");
+  document.getElementById("voteePending").innerHTML = notYet.length
+    ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
+    : '<span class="done">전원 투표 완료 ✓</span>';
+
+  var max = 0;
+  TOPICS.forEach(function(t){ max = Math.max(max, votesFor(t.id).length); });
+
+  document.getElementById("topicList").innerHTML = TOPICS.map(function(t){
+    var vs = votesFor(t.id);
+    var mineHere = vs.filter(isMine).length > 0;
+    var isFin = (fin === t.id);
+    var pct = MEMBERS.length ? Math.round(vs.length / MEMBERS.length * 100) : 0;
+    return '<article class="topic' + (isFin ? " won" : mineHere ? " mine" : "") + '">' +
+      '<div class="topic-top"><span class="topic-code">' + esc(t.code) + "</span>" +
+      '<span class="votecount' + (vs.length && vs.length === max ? " hot" : "") + '">' + vs.length + "표</span></div>" +
+      "<h3>" + esc(t.title) + "</h3>" +
+      '<div class="kw">' + t.kw.map(function(k){ return "<span>" + esc(k) + "</span>"; }).join("") + "</div>" +
+      '<div class="tline"><b>분임 내 관련 부처</b><span>' + esc(t.inside) + "</span></div>" +
+      '<div class="tline"><b>추천 방문지</b><span>' + esc(t.visit) + "</span></div>" +
+      '<div class="tline"><b>연계 봉사</b><span>' + esc(t.vol) + "</span></div>" +
+      '<div class="tline pro"><b>유리한 점</b><span>' + esc(t.pro) + "</span></div>" +
+      '<div class="tline con"><b>부담되는 점</b><span>' + esc(t.con) + "</span></div>" +
+      '<div class="votebar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="voters">' + vs.map(function(r){ return "<span>" + esc(r.name) + "</span>"; }).join("") + "</div>" +
+      '<div class="ev-acts">' +
+        '<button class="btn ' + (mineHere ? "" : "pri") + '" data-vote="' + t.id + '"' + (me ? "" : " disabled") + '>' +
+          (mineHere ? "내 선택 ✓" : "이 주제 선택") + "</button>" +
+        (isAdmin ? '<button class="btn ' + (isFin ? "warn" : "") + '" data-final="' + t.id + '">' +
+          (isFin ? "확정 해제" : "이 주제로 확정") + "</button>" : "") +
+      "</div></article>";
+  }).join("");
+}
+
+document.getElementById("topicList").addEventListener("click", function(e){
+  var b = e.target.closest("[data-vote],[data-final]");
+  if (!b) return;
+  if (b.dataset.vote) castVote(b.dataset.vote);
+  else setFinal(b.dataset.final);
+});
+
 /* ═══════════ 뷰 전환 ═══════════ */
-var vtabs = [document.getElementById("vt-cal"), document.getElementById("vt-role")];
+var VIEWS = ["topic", "cal", "role"];
+function needsData(v){ return v === "topic" || v === "role"; }
+function currentView(){
+  for (var i = 0; i < VIEWS.length; i++)
+    if (!document.getElementById("view-" + VIEWS[i]).hidden) return VIEWS[i];
+  return "topic";
+}
 function showView(which){
-  var isRole = (which === "role");
-  vtabs[0].setAttribute("aria-selected", String(!isRole));
-  vtabs[1].setAttribute("aria-selected", String(isRole));
-  document.getElementById("view-cal").hidden = isRole;
-  document.getElementById("view-role").hidden = !isRole;
-  document.getElementById("idbar").hidden = !isRole;
-  document.getElementById("livewrap").hidden = !isRole;
-  document.body.classList.toggle("role-mode", isRole);
+  if (VIEWS.indexOf(which) < 0) which = "topic";
+  VIEWS.forEach(function(v){
+    document.getElementById("vt-" + v).setAttribute("aria-selected", String(v === which));
+    document.getElementById("view-" + v).hidden = (v !== which);
+  });
+  var live = needsData(which);
+  document.getElementById("idbar").hidden = !live;
+  document.getElementById("livewrap").hidden = !live;
+  document.body.classList.toggle("role-mode", live);
   try{ localStorage.setItem("t7.view", which); }catch(e){}
-  if (isRole) pull();
+  if (live) pull();
   window.scrollTo(0, 0);
 }
-vtabs[0].addEventListener("click", function(){ showView("cal"); });
-vtabs[1].addEventListener("click", function(){ showView("role"); });
+VIEWS.forEach(function(v){
+  document.getElementById("vt-" + v).addEventListener("click", function(){ showView(v); });
+});
 
 document.addEventListener("visibilitychange", function(){
-  if (document.visibilityState === "visible" && !document.getElementById("view-role").hidden) pull();
+  if (document.visibilityState === "visible" && needsData(currentView())) pull();
 });
 
 /* ═══════════ 시작 ═══════════ */
@@ -997,10 +1179,11 @@ renderNextUp();
 renderMonth();
 renderDay();
 renderBoard();
+renderTopics();
 
 var saved = null;
 try{ saved = localStorage.getItem("t7.view"); }catch(e){}
-showView(saved === "role" ? "role" : "cal");
+showView(saved || "topic");
 if (HAS_API){
   setLive("off", "연결 중");
   timer = setInterval(function(){
