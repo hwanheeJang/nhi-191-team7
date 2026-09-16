@@ -370,8 +370,34 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     </div>
   </div>
 
+  <div class="sec-head"><h2>배점 구조</h2><span>총 100점</span></div>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>구분</th><th>항목</th><th>배점</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="6">개인평가<br>(70)</td><td>정책기획 실습과제</td><td class="num">10 · P/F</td></tr>
+        <tr><td>정책기획 평가보고서</td><td class="num">20 · 상대평가</td></tr>
+        <tr><td>리더십 에세이</td><td class="num">20 · P/F</td></tr>
+        <tr><td>리더십 구두발표 실습</td><td class="num">5 · P/F</td></tr>
+        <tr><td>리더십 역할수행 실습</td><td class="num">5 · P/F</td></tr>
+        <tr><td>개인활동·교육태도 (근태)</td><td class="num">10 · 가·감점</td></tr>
+        <tr><td rowspan="6">단체평가<br>(30)</td><td>분임 정책연구 보고서 + 발표</td><td class="num">25 · 상대평가</td></tr>
+        <tr><td>사회봉사활동 계획서</td><td class="num">1 · P/F</td></tr>
+        <tr><td>사회봉사활동 결과보고서</td><td class="num">1 · P/F</td></tr>
+        <tr><td>정책현장학습 계획서</td><td class="num">1 · P/F</td></tr>
+        <tr><td>정책현장학습 결과보고서</td><td class="num">1 · P/F</td></tr>
+        <tr><td>분임 정책연구 AI활용 실적</td><td class="num">1 · P/F</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note-plain">
+    <b>공통 감점</b> — 과제 제출 지연 시 <b>과제별 최대 5점</b>, 사전교육(e러닝) 미이수 시 <b>0.3점</b>, 리더십 에세이 F 시 <b>최대 3점</b>.
+    성적 우수자와 정책연구·AI활용 우수분임에는 표창과 시상품이 있습니다.
+  </div>
+
   <footer>
-    출처: 나라배움터 공지사항 — 「정책기획」·「분임정책연구」 평가계획, 정책현장학습 안내, AI활용 실적 평가 안내.
+    출처: 나라배움터 공지사항 — 과정 운영계획 「평가 안내」, 「정책기획」·「분임정책연구」 평가계획, 정책현장학습 안내, AI활용 실적 평가 안내.
+    평가 일정은 운영상황에 따라 변동될 수 있습니다.
     ‘분임 자체 목표’로 표시된 항목은 공식 일정이 아니라 우리 분임이 스스로 잡은 기한입니다.
   </footer>
 </div>
@@ -563,6 +589,59 @@ var EVENTS = [
     items:["추첨 결과가 나라배움터 공지사항에 게시됩니다. 7분임 발표 시각은 이때 확정."],
     kakao:"[7분임] 10.16(금)\n분임정책연구 발표 순서 추첨\n- 결과는 나라배움터 공지사항 게시\n- 우리 발표 시각은 이때 확정됩니다" },
 
+  { m:9, d:16, t:"17:00", kind:"due", who:"분임 공통", pts:"배점 없음",
+    title:"분임 정책연구 주제 제출",
+    items:[
+      "나라배움터 과제게시판 제출. 우리 분임은 국정과제 <b>54·84·107</b> 세 개로 등록을 마쳤습니다.",
+      "배점은 없지만 이후 계획서와 보고서의 출발점이 됩니다."
+    ],
+    kakao:"[7분임] 9.16(수) 17:00\n분임 정책연구 주제 제출\n→ 54 / 84 / 107 등록 완료" },
+
+  { m:9, d:30, t:"14:00", kind:"due", who:"개인 평가", pts:"20점",
+    title:"리더십 에세이 제출 (1차)",
+    items:[
+      "개인평가 70점 중 <b>20점</b>으로, 정책기획 평가보고서와 함께 배점이 가장 큰 항목입니다.",
+      "1차는 P/F로 평가하고, F를 받으면 10.13(화) 09:00까지 2차 재평가를 받습니다."
+    ],
+    warn:"F인 경우 최대 3점 감점됩니다.",
+    kakao:"[7분임] 9.30(수) 14:00\n리더십 에세이 1차 제출 (20점)\n- 1차 P/F, F면 10.13(화) 09:00 재평가\n- F인 경우 최대 3점 감점" },
+
+  { m:10, d:1, t:"17:00", kind:"due", who:"분임 공통", pts:"1점 P/F",
+    title:"사회봉사활동 계획서 제출",
+    items:[
+      "정책현장학습 세부계획서와 <b>별개 항목</b>입니다. 같은 날 같은 시각 마감이니 함께 준비하세요.",
+      "봉사기관, 활동내용, 참여인원 등을 담습니다."
+    ],
+    kakao:"[7분임] 10.1(목) 17:00 마감 2건\n① 정책현장학습 세부계획서 (1점 P/F)\n② 사회봉사활동 계획서 (1점 P/F)\n※ 서로 별개 항목입니다" },
+
+  { m:10, d:12, t:"", tnote:"실습시간 내", kind:"event", who:"개인 평가", pts:"5점 P/F",
+    title:"리더십 구두발표 실습",
+    items:[
+      "리더십 교과 실습시간 중에 진행됩니다.",
+      "같은 날 역할수행 실습(5점)도 함께 있습니다."
+    ],
+    kakao:"[7분임] 10.12(월) 실습시간 내\n리더십 구두발표 실습 (5점 P/F)\n리더십 역할수행 실습 (5점 P/F)\n※ 같은 날 14:00 AI 제출, 17:00 보고서 제출도 있습니다" },
+
+  { m:10, d:12, t:"", tnote:"실습시간 내", kind:"event", who:"개인 평가", pts:"5점 P/F",
+    title:"리더십 역할수행 실습",
+    items:["리더십 교과 실습시간 중에 진행됩니다."],
+    kakao:"[7분임] 10.12(월) 실습시간 내\n리더십 역할수행 실습 (5점 P/F)" },
+
+  { m:10, d:13, t:"09:00", kind:"due", who:"개인 평가", pts:"재평가",
+    title:"리더십 에세이 (2차 재평가)",
+    items:[
+      "9.30 1차에서 <b>F를 받은 사람만</b> 해당합니다.",
+      "F인 경우 최대 3점 감점이 반영됩니다."
+    ],
+    kakao:"[7분임] 10.13(화) 09:00\n리더십 에세이 2차 재평가\n※ 1차 F 받은 분만 해당" },
+
+  { m:10, d:13, t:"14:00", kind:"due", who:"분임 공통", pts:"1점 P/F",
+    title:"사회봉사활동 결과보고서 제출",
+    items:[
+      "정책현장학습 결과보고서와 <b>별개 항목</b>입니다. 같은 날 같은 시각 마감입니다."
+    ],
+    kakao:"[7분임] 10.13(화) 14:00 마감 2건\n① 정책현장학습 결과보고서 (1점 P/F)\n② 사회봉사활동 결과보고서 (1점 P/F)\n※ 서로 별개 항목입니다" },
+
   { m:10, d:19, t:"09:30", end:"17:00", kind:"event", who:"분임 전원", pts:"25점 중 25%",
     title:"분임정책연구 발표",
     items:[
@@ -608,6 +687,12 @@ var ROLES = [
    d:"봉사기관 섭외(19명 수용 확인)와 현장 기록. 활동 전·후 단체사진 증빙 책임."}
 ];
 var TEAMS = ["연구조사반","보고서집필반","AI·편집반","현장운영반"];
+
+EVENTS.sort(function(a, b){
+  var d = (a.m * 100 + a.d) - (b.m * 100 + b.d);
+  if (d) return d;
+  return (a.t || "00:00").localeCompare(b.t || "00:00");
+});
 
 /* ═══════════ 정책연구 주제 후보 ═══════════ */
 var TOPICS = [
@@ -765,7 +850,7 @@ function renderNextUp(){
   if (!up.length){ box.innerHTML = '<div class="dd">일정 종료</div><h3>남은 공식 일정이 없습니다</h3><p>수고 많으셨습니다.</p>'; return; }
   var n = up[0], n2 = up[1];
   box.innerHTML =
-    '<div class="dd">' + ddText(daysTo(n)) + ' · ' + n.m + '.' + n.d + '(' + DOW[evDate(n).getDay()] + ')' + (n.t ? " " + n.t : "") + '</div>' +
+    '<div class="dd">' + ddText(daysTo(n)) + ' · ' + n.m + '.' + n.d + '(' + DOW[evDate(n).getDay()] + ')' + (n.t ? " " + n.t : n.tnote ? " " + n.tnote : "") + '</div>' +
     "<h3>" + esc(n.title) + "</h3>" +
     "<p>" + esc(n.who) + " · " + esc(n.pts) + (n2 ? " &nbsp;|&nbsp; 다음: " + n2.m + "." + n2.d + " " + esc(n2.title) : "") + "</p>";
 }
@@ -823,7 +908,7 @@ function renderDay(){
     var whoCls = /개인/.test(e.who) ? "who-me" : /연구장|분임장/.test(e.who) ? "who-lead" : "who-team";
     return '<article class="ev ' + e.kind + '">' +
       '<div class="ev-top">' +
-        (e.t ? '<span class="time">' + esc(e.t) + (e.end && e.end !== e.t ? "~" + esc(e.end) : "") + "</span>" : '<span class="time">종일</span>') +
+        (e.t ? '<span class="time">' + esc(e.t) + (e.end && e.end !== e.t ? "~" + esc(e.end) : "") + "</span>" : '<span class="time">' + esc(e.tnote || "종일") + "</span>") +
         '<span class="tag ' + whoCls + '">' + esc(e.who) + "</span>" +
         '<span class="tag pt">' + esc(e.pts) + "</span>" +
       "</div>" +
