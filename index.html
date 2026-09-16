@@ -745,6 +745,8 @@ var HAS_API = /^https:\/\//.test(API);
 var LS = { me:"t7.me", local:"t7.local" };
 var me = load(LS.me) || null;
 var rows = [], filter = "all", isAdmin = false, timer = null, busy = false;
+// 첫 조회가 끝나기 전에는 0이 아니라 "불러오는 중"을 보여줍니다.
+var loaded = !/^https:\/\//.test((CONFIG.API_URL || "").trim());
 var DOW = ["일","월","화","수","목","금","토"];
 
 try{
@@ -1008,7 +1010,7 @@ function fetchRows(){
 // 구글 쪽에서 가끔 한 번씩 응답이 튑니다. 한 번 실패했다고 바로 끊김으로 보이지 않게 재시도합니다.
 function pull(){
   if (!HAS_API){ rows = load(LS.local) || []; renderAll(); return Promise.resolve(); }
-  var apply = function(j){ rows = (j && j.rows) || []; setLive("ok", "실시간 " + hhmm()); renderAll(); };
+  var apply = function(j){ rows = (j && j.rows) || []; loaded = true; setLive("ok", "실시간 " + hhmm()); renderAll(); };
   return fetchRows().then(apply).catch(function(){
     setLive("off", "재연결 중");
     return wait(1500).then(fetchRows).then(apply).catch(function(){
@@ -1030,7 +1032,7 @@ function push(action, payload){
     .catch(function(){ return wait(1500).then(send); })
     .then(function(j){
       busy = false;
-      if (j && j.rows){ rows = j.rows; setLive("ok","실시간 " + hhmm()); renderAll(); }
+      if (j && j.rows){ rows = j.rows; loaded = true; setLive("ok","실시간 " + hhmm()); renderAll(); }
       else return pull();
     })
     .catch(function(){ busy = false; setLive("err","저장 실패"); toast("저장에 실패했습니다. 다시 한 번 눌러 주세요."); });
@@ -1063,9 +1065,9 @@ function renderBoard(){
     else if (list.length) want++;
     else none++;
   });
-  document.getElementById("s-conf").textContent = conf;
-  document.getElementById("s-want").textContent = want;
-  document.getElementById("s-none").textContent = none;
+  document.getElementById("s-conf").textContent = loaded ? conf : "·";
+  document.getElementById("s-want").textContent = loaded ? want : "·";
+  document.getElementById("s-none").textContent = loaded ? none : "·";
   document.getElementById("bar-f").style.width = (conf / ROLES.length * 100) + "%";
   document.getElementById("bar-p").style.width = (want / ROLES.length * 100) + "%";
 
@@ -1087,12 +1089,17 @@ function renderBoard(){
   var applied = {};
   roleRows().forEach(function(r){ applied[normGb(r.gb)] = 1; });
   var notYet = MEMBERS.filter(function(m){ return !applied[normGb(m.gb)]; });
-  document.getElementById("pendingWho").textContent =
-    notYet.length ? MEMBERS.length - notYet.length + " / " + MEMBERS.length + "명 신청 완료"
-                  : "18명 전원이 신청했습니다.";
-  document.getElementById("pendingList").innerHTML = notYet.length
-    ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
-    : '<span class="done">모두 완료 ✓</span>';
+  if (!loaded){
+    document.getElementById("pendingWho").textContent = "불러오는 중…";
+    document.getElementById("pendingList").innerHTML = "";
+  } else {
+    document.getElementById("pendingWho").textContent =
+      notYet.length ? MEMBERS.length - notYet.length + " / " + MEMBERS.length + "명 신청 완료"
+                    : "18명 전원이 신청했습니다.";
+    document.getElementById("pendingList").innerHTML = notYet.length
+      ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
+      : '<span class="done">모두 완료 ✓</span>';
+  }
 
   var html = "";
   TEAMS.forEach(function(team){
@@ -1120,7 +1127,8 @@ function roleCard(role){
   var hasConf = list.some(function(r){ return r.status === "conf"; });
   var cls = hasConf ? "filled" : (list.length ? "pending" : "empty");
   var mineHere = list.filter(isMine)[0];
-  var people = list.length ? list.map(function(r){
+  var people = !loaded ? '<span style="font-size:12.5px;color:var(--muted)">불러오는 중…</span>'
+    : list.length ? list.map(function(r){
     var can = isAdmin || isMine(r);
     return '<span class="person ' + (r.status === "conf" ? "conf" : "want") + '">' + esc(r.name) +
            (r.status === "conf" ? " ✓" : "") +
@@ -1214,12 +1222,17 @@ function renderTopics(){
   var voted = {}, total = 0;
   voteRows().forEach(function(r){ voted[normGb(r.gb)] = 1; total++; });
   var notYet = MEMBERS.filter(function(m){ return !voted[normGb(m.gb)]; });
-  document.getElementById("voteWho").textContent =
-    (MEMBERS.length - notYet.length) + " / " + MEMBERS.length + "명 투표 완료" +
-    (notYet.length ? " · 아직 안 한 사람" : "");
-  document.getElementById("voteePending").innerHTML = notYet.length
-    ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
-    : '<span class="done">전원 투표 완료 ✓</span>';
+  if (!loaded){
+    document.getElementById("voteWho").textContent = "불러오는 중…";
+    document.getElementById("voteePending").innerHTML = "";
+  } else {
+    document.getElementById("voteWho").textContent =
+      (MEMBERS.length - notYet.length) + " / " + MEMBERS.length + "명 투표 완료" +
+      (notYet.length ? " · 아직 안 한 사람" : "");
+    document.getElementById("voteePending").innerHTML = notYet.length
+      ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
+      : '<span class="done">전원 투표 완료 ✓</span>';
+  }
 
   var max = 0;
   TOPICS.forEach(function(t){ max = Math.max(max, votesFor(t.id).length); });
@@ -1231,7 +1244,7 @@ function renderTopics(){
     var pct = MEMBERS.length ? Math.round(vs.length / MEMBERS.length * 100) : 0;
     return '<article class="topic' + (isFin ? " won" : mineHere ? " mine" : "") + '">' +
       '<div class="topic-top"><span class="topic-code">' + esc(t.code) + "</span>" +
-      '<span class="votecount' + (vs.length && vs.length === max ? " hot" : "") + '">' + vs.length + "표</span></div>" +
+      '<span class="votecount' + (vs.length && vs.length === max ? " hot" : "") + '">' + (loaded ? vs.length + "표" : "…") + "</span></div>" +
       "<h3>" + esc(t.title) + "</h3>" +
       '<div class="kw">' + t.kw.map(function(k){ return "<span>" + esc(k) + "</span>"; }).join("") + "</div>" +
       '<div class="tline"><b>추천 방문지</b><span>' + esc(t.visit) + "</span></div>" +
@@ -1241,8 +1254,8 @@ function renderTopics(){
       '<div class="votebar"><i style="width:' + pct + '%"></i></div>' +
       '<div class="voters">' + vs.map(function(r){ return "<span>" + esc(r.name) + "</span>"; }).join("") + "</div>" +
       '<div class="ev-acts">' +
-        '<button class="btn ' + (mineHere ? "" : "pri") + '" data-vote="' + t.id + '"' + (me ? "" : " disabled") + '>' +
-          (mineHere ? "내 선택 ✓" : "이 주제 선택") + "</button>" +
+        '<button class="btn ' + (mineHere ? "" : "pri") + '" data-vote="' + t.id + '"' + (me && loaded ? "" : " disabled") + '>' +
+          (!loaded ? "불러오는 중…" : mineHere ? "내 선택 ✓" : "이 주제 선택") + "</button>" +
         (isAdmin ? '<button class="btn ' + (isFin ? "warn" : "") + '" data-final="' + t.id + '">' +
           (isFin ? "확정 해제" : "이 주제로 확정") + "</button>" : "") +
       "</div></article>";
