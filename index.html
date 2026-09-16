@@ -959,25 +959,40 @@ function setLive(state, text){
 }
 function hhmm(){ var d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 
+function wait(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+function fetchRows(){
+  return fetch(API + "?t=" + Date.now(), { method:"GET", cache:"no-store" })
+    .then(function(r){ return r.json(); });
+}
+// 구글 쪽에서 가끔 한 번씩 응답이 튑니다. 한 번 실패했다고 바로 끊김으로 보이지 않게 재시도합니다.
 function pull(){
   if (!HAS_API){ rows = load(LS.local) || []; renderAll(); return Promise.resolve(); }
-  return fetch(API + "?t=" + Date.now(), { method:"GET" })
-    .then(function(r){ return r.json(); })
-    .then(function(j){ rows = (j && j.rows) || []; setLive("ok", "실시간 " + hhmm()); renderAll(); })
-    .catch(function(){ setLive("err", "연결 끊김"); });
+  var apply = function(j){ rows = (j && j.rows) || []; setLive("ok", "실시간 " + hhmm()); renderAll(); };
+  return fetchRows().then(apply).catch(function(){
+    setLive("off", "재연결 중");
+    return wait(1500).then(fetchRows).then(apply).catch(function(){
+      return wait(3000).then(fetchRows).then(apply).catch(function(){
+        setLive("err", "연결 끊김 · 자동 재시도 중");
+      });
+    });
+  });
 }
 function push(action, payload){
   if (!HAS_API){ applyLocal(action, payload); save(LS.local, rows); renderAll(); return Promise.resolve(); }
   if (busy) return Promise.resolve();
   busy = true;
-  return fetch(API, { method:"POST", body: JSON.stringify({ action:action, payload:payload }) })
-    .then(function(r){ return r.json(); })
+  var body = JSON.stringify({ action:action, payload:payload });
+  var send = function(){
+    return fetch(API, { method:"POST", body: body }).then(function(r){ return r.json(); });
+  };
+  return send()
+    .catch(function(){ return wait(1500).then(send); })
     .then(function(j){
       busy = false;
       if (j && j.rows){ rows = j.rows; setLive("ok","실시간 " + hhmm()); renderAll(); }
       else return pull();
     })
-    .catch(function(){ busy = false; setLive("err","저장 실패"); toast("저장에 실패했습니다. 다시 시도해 주세요."); });
+    .catch(function(){ busy = false; setLive("err","저장 실패"); toast("저장에 실패했습니다. 다시 한 번 눌러 주세요."); });
 }
 function applyLocal(action, p){
   if (action === "add") rows.push({ id: uid(), roleId:p.roleId, name:p.name, gb:p.gb, status:"want" });
