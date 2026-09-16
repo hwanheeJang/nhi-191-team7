@@ -111,6 +111,7 @@ header.mast{position:sticky; top:0; z-index:30;
 .btn.ghost{background:transparent}
 .btn.warn{color:var(--urgent); border-color:color-mix(in srgb, var(--urgent) 35%, transparent)}
 .btn.sm{padding:5px 10px; font-size:12px}
+a.btn{display:inline-block; text-decoration:none; text-align:center}
 .btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .sec-head{display:flex; align-items:baseline; gap:9px; border-bottom:2px solid var(--ink);
   padding-bottom:6px; margin:22px 0 11px}
@@ -362,11 +363,17 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     <h3>모든 일정을 휴대폰 캘린더에 담기</h3>
     <ul>
       <li>제출 마감은 <b>하루 전</b>과 <b>2시간 전</b>에 기기 알림이 울리도록 넣어 두었습니다.</li>
-      <li>받은 파일을 열면 아이폰은 캘린더, 안드로이드는 구글 캘린더로 바로 들어갑니다.</li>
+      <li>안드로이드는 <b>내 파일 → 다운로드</b>에 저장됩니다. 파일을 탭해 캘린더 앱으로 열면 추가됩니다.</li>
     </ul>
     <div class="ev-acts">
-      <button class="btn pri" id="ics-all">전체 일정 내려받기 (.ics)</button>
+      <a class="btn pri" href="7bunim_schedule.ics" download="7bunim_schedule.ics">전체 일정 내려받기 (.ics)</a>
+      <button class="btn" id="ics-all">안 되면 이걸 눌러보세요</button>
       <button class="btn" id="copy-all">전체 일정 카톡용 복사</button>
+    </div>
+    <div class="warnbox" style="margin-top:10px">
+      카카오톡에서 바로 열면 파일 내려받기가 막혀 있을 수 있습니다.
+      아무 반응이 없으면 오른쪽 위 ⋮ → <b>다른 브라우저로 열기</b>(크롬)로 연 뒤 다시 눌러 주세요.
+      일정별 <b>[구글 캘린더에 추가]</b> 버튼은 인앱 브라우저에서도 동작합니다.
     </div>
   </div>
 
@@ -791,15 +798,29 @@ function icsStamp(){
   return n.getUTCFullYear() + pad(n.getUTCMonth()+1) + pad(n.getUTCDate()) + "T" +
          pad(n.getUTCHours()) + pad(n.getUTCMinutes()) + pad(n.getUTCSeconds()) + "Z";
 }
+/* 일정 식별자는 날짜와 제목에서 만듭니다. 목록 순서가 바뀌어도 값이 그대로라,
+   다시 받아도 기존 일정이 갱신될 뿐 새로 쌓이지 않습니다.
+   일정 내용을 고칠 때는 ICS_VERSION을 1 올려 주세요. */
+var ICS_VERSION = 2;
+function icsHash(str){
+  var h = 5381;
+  for (var i = 0; i < str.length; i++) h = ((h * 33) ^ str.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+function icsUid(e){
+  return "t7-" + YEAR + pad(e.m) + pad(e.d) + "-" + icsHash(e.title) + "@nhi191";
+}
 function icsFor(list){
   var L = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//7bunim//schedule//KO","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
   var stamp = icsStamp();
-  list.forEach(function(e, i){
+  list.forEach(function(e){
     var ymd = YEAR + pad(e.m) + pad(e.d);
     var desc = stripTags(e.items.join(" / ")) + (e.warn ? " / [주의] " + stripTags(e.warn) : "");
     L.push("BEGIN:VEVENT");
-    L.push("UID:t7-" + ymd + "-" + i + "@nhi191");
+    L.push("UID:" + icsUid(e));
     L.push("DTSTAMP:" + stamp);
+    L.push("SEQUENCE:" + ICS_VERSION);
+    L.push("LAST-MODIFIED:" + stamp);
     if (e.t){
       var st = e.t.replace(":", "") + "00";
       var en = (e.end || e.t).replace(":", "") + "00";
@@ -824,6 +845,24 @@ function icsFor(list){
   });
   L.push("END:VCALENDAR");
   return L.join("\r\n");
+}
+// 파일 다운로드가 막히는 브라우저(카카오톡 인앱 등)를 위한 대안 — 구글 캘린더에 바로 추가
+function gcalUrl(e){
+  var ymd = YEAR + pad(e.m) + pad(e.d), dates;
+  if (e.t){
+    var st = e.t.replace(":", "") + "00";
+    var en = (e.end || e.t).replace(":", "") + "00";
+    if (en <= st){ var h = Math.min(parseInt(e.t.slice(0,2),10) + 1, 23); en = pad(h) + e.t.slice(3,5) + "00"; }
+    dates = ymd + "T" + st + "/" + ymd + "T" + en;
+  } else {
+    var nx = new Date(YEAR, e.m - 1, e.d + 1);
+    dates = ymd + "/" + nx.getFullYear() + pad(nx.getMonth()+1) + pad(nx.getDate());
+  }
+  return "https://calendar.google.com/calendar/render?action=TEMPLATE"
+    + "&text=" + encodeURIComponent("[7분임] " + e.title)
+    + "&dates=" + dates
+    + "&ctz=Asia/Seoul"
+    + "&details=" + encodeURIComponent(stripTags(e.items.join("\n")) + (e.warn ? "\n[주의] " + stripTags(e.warn) : ""));
 }
 function downloadIcs(list, filename){
   try{
@@ -918,7 +957,8 @@ function renderDay(){
       (e.warn ? '<div class="warnbox">' + e.warn + "</div>" : "") +
       (e.kind === "self" ? '<div class="selfnote">공식 일정이 아니라 우리 분임이 스스로 잡은 기한입니다.</div>' : "") +
       '<div class="ev-acts">' +
-        '<button class="btn sm" data-ics="' + idx + '">캘린더에 담기</button>' +
+        '<a class="btn sm" href="' + gcalUrl(e) + '" target="_blank" rel="noopener">구글 캘린더에 추가</a>' +
+        '<button class="btn sm" data-ics="' + idx + '">파일로 받기 (.ics)</button>' +
         '<button class="btn sm" data-kakao="' + idx + '">카톡 공지문 복사</button>' +
       "</div></article>";
   }).join("");
