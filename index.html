@@ -250,6 +250,24 @@ a.btn{display:inline-block; text-decoration:none; text-align:center}
 .idbar select:focus{outline:2px solid var(--accent); outline-offset:-1px}
 
 /* ───── 주제 투표 ───── */
+.fixedtopic{margin-top:16px; background:var(--accent-soft);
+  border:1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  border-left:3px solid var(--accent); border-radius:3px; padding:14px 15px}
+.fixedtopic .l{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em;
+  color:var(--accent); font-weight:600}
+.fixedtopic h2{margin:4px 0 5px; font-family:"Gowun Batang",serif; font-size:17px;
+  font-weight:700; color:var(--ink); letter-spacing:-.015em; line-height:1.4}
+.fixedtopic p{margin:0; font-size:12.5px; color:var(--ink-2)}
+.note-key{margin-top:11px; background:var(--surface); border:1px solid var(--rule);
+  border-left:3px solid var(--urgent); border-radius:3px; padding:13px 15px;
+  font-size:13.2px; color:var(--ink-2); line-height:1.65}
+.note-key b{color:var(--ink)}
+.pq{font-family:"Gowun Batang",serif; font-size:14.5px; line-height:1.62; color:var(--ink);
+  background:var(--surface-2); border-left:2px solid var(--accent); border-radius:2px;
+  padding:11px 13px; margin:0 0 11px}
+.recbadge{font-size:10.5px; font-weight:700; letter-spacing:.04em; padding:2px 8px; border-radius:2px;
+  background:var(--accent-soft); color:var(--accent)}
+.recbadge.hard{background:var(--gold-soft); color:var(--gold)}
 .finalbox{margin-top:16px; background:var(--ok-soft); border:1px solid color-mix(in srgb, var(--ok) 35%, transparent);
   border-left:3px solid var(--ok); border-radius:3px; padding:13px 15px}
 .finalbox .l{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--ok); font-weight:600}
@@ -315,6 +333,19 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
 
 <!-- ══════════ 주제 ══════════ -->
 <div class="wrap" id="view-topic" role="tabpanel" aria-labelledby="vt-topic">
+  <div class="fixedtopic">
+    <div class="l">분임 정책연구 주제 · 확정</div>
+    <h2>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」</h2>
+    <p>통일부 · 평화경제특구 조성, DMZ 국제 생태·평화관광 협력지구 개발, 경제협력 사업 재개</p>
+  </div>
+
+  <div class="note-key">
+    <b>이 과제는 절반이 북한의 호응 없이는 움직일 수 없는 영역입니다.</b>
+    개성공단 재가동은 유엔 안보리 결의 2375호가 합작사업을 금지하고 있고, 금강산관광은 현금 유입 제재에 걸립니다.
+    여기에 문제를 걸면 대안이 전부 “여건이 조성되면”으로 끝나 실용성 20점·타당성 15점을 잃습니다.
+    아래 다섯 후보는 모두 <b>우리가 지금 집행할 수 있는 국내 영역</b>으로 좁힌 것들입니다.
+  </div>
+
   <div class="finalbox" id="finalbox" hidden></div>
 
   <div class="mecard" style="margin-top:16px">
@@ -323,11 +354,12 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     <div class="pending-list" id="voteePending"></div>
   </div>
 
-  <div class="sec-head"><h2>세 후보 중 하나를 골라주세요</h2><span id="voteDue">~9.17(목) 10:00</span></div>
+  <div class="sec-head"><h2>세부 주제 다섯 중 하나를 골라주세요</h2><span id="voteDue">~9.18(금)</span></div>
   <div id="topicList"></div>
 
   <div class="note-plain">
     한 사람이 하나만 고를 수 있고, 언제든 바꿀 수 있습니다. 최종 확정은 분임장·연구장이 합니다.
+    후보 1·2는 현장이 파주로 겹쳐서, 하나를 본론으로 두고 다른 하나를 추진계획에서 연계하는 구성도 가능합니다.
   </div>
 </div>
 
@@ -471,16 +503,22 @@ var EVENTS = [
     ],
     kakao:"[7분임] 9.18(금) 16:00\nAI Tool 구매 (분임별 1개, 3만원 내)\n- 영수증 내면 실비 정산\n- 가족공유 되는 Gemini 권장\n  (공유 여부가 협업평가에 반영)" },
 
-  { m:9, d:17, t:"10:00", kind:"self", who:"분임 전원", pts:"투표 마감",
-    title:"연구주제 투표 마감 (54 / 84 / 107 중 1개)",
+  { m:9, d:17, t:"", kind:"event", who:"분임 공통", pts:"완료",
+    title:"분임 과제 선정 — 국정과제 118 확정",
     items:[
-      "<b>분임 과제 선정이 9.17(목) 오전 중에 진행</b>되므로, 그 전에 의견이 모여 있어야 합니다.",
-      "후보: 54 소멸위기지역 재도약 / 84 필수의료·공공의료 강화 / 107 관광산업 기반 구축.",
-      "주제가 정해져야 계획서 작성과 방문지·봉사기관 섭외를 시작할 수 있습니다. 계획서 마감은 9.22(화) 오전 9시입니다.",
-      "상황판 <b>주제 탭</b>에서 하나만 누르시면 됩니다."
+      "우리 분임 주제는 <b>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」</b>(통일부)로 확정되었습니다.",
+      "세부 내용: 평화경제특구 조성 / DMZ 국제 생태·평화관광 협력지구 개발 / 경제협력 사업 재개 및 다자협력."
     ],
-    warn:"오전 10시 마감입니다. 오늘 밤 안에 눌러 두세요.",
-    kakao:"[7분임] 주제 투표 마감 9.17(목) 10:00\n\n분임 과제 선정이 내일 오전에 진행됩니다.\n그 전에 의견이 모여야 해서\n오전 10시까지 부탁드립니다.\n\n54 소멸위기지역 / 84 필수의료 / 107 관광\n상황판 '주제' 탭에서 하나만 눌러주세요.\n\nhttps://hwanheejang.github.io/nhi-191-team7/" },
+    kakao:"[7분임] 분임 과제 선정 완료\n국정과제 118\n「한반도 평화경제 및 공동성장의 미래 준비」(통일부)" },
+
+  { m:9, d:18, t:"", kind:"self", who:"분임 전원", pts:"자체 목표",
+    title:"세부 연구주제 확정 (후보 5개 중 1개)",
+    items:[
+      "118번은 범위가 넓어 그대로는 6쪽 보고서가 되지 않습니다. 상황판 <b>주제 탭</b>에서 다섯 후보 중 하나를 골라주세요.",
+      "세부 주제가 정해져야 방문기관 섭외와 계획서 작성을 시작할 수 있습니다. 계획서 마감은 9.22(화) 오전 9시입니다."
+    ],
+    warn:"공식 마감이 아니라 우리 분임 자체 목표입니다.",
+    kakao:"[7분임] 세부 주제 투표 (~9.18 금)\n\n118번은 범위가 넓어 좁혀야 합니다.\n상황판 '주제' 탭에서 5개 후보 중\n하나만 눌러주세요.\n\nhttps://hwanheejang.github.io/nhi-191-team7/" },
 
   { m:9, d:22, t:"09:00", kind:"due", who:"연구장 제출", pts:"P/F 2점",
     title:"분임 정책연구계획서 제출",
@@ -704,29 +742,55 @@ EVENTS.sort(function(a, b){
 
 /* ═══════════ 정책연구 주제 후보 ═══════════ */
 var TOPICS = [
-  { id:"t54", code:"국정과제 54",
-    title:"소멸위기지역 재도약을 위한 지원 강화",
-    kw:["인구감소지역 89곳","지방소멸대응기금","생활인구","고향사랑기부제","빈집·유휴공간"],
-    visit:"괴산군청 + 산촌 청년창업특구 — 편도 40분",
-    vol:"괴산 농촌 일손돕기 (10월 초 수확기)",
-    pro:"방문지가 가장 가깝고 담당자 인터뷰가 현실적. 기금 집행 자료와 통계가 풍부.",
-    con:"이미 나온 대책이 많아 차별화된 대안을 내기가 부담." },
+  { id:"p1", code:"후보 1", rec:"추천",
+    title:"한 손으로 주고 다른 손으로 묶는다 — 평화경제특구와 수도권 규제의 충돌",
+    pq:"평화경제특구법은 법인세 100% 감면(3년)과 40여 개 인허가 의제를 줍니다. 그런데 경기 접경지역은 「수도권정비계획법」상 여전히 ‘수도권’입니다. 인센티브와 규제가 같은 땅에서 맞부딪칩니다.",
+    kw:["평화경제특구법","수도권정비계획법","중첩규제","접경지역 지원 특별법"],
+    evid:"연천군은 인구감소지역이면서 법적으로 ‘수도권’이라 비수도권 대상 투자보조금·세액공제에서 배제됩니다. 연천 BIX 산업단지 분양률은 29% 수준. 산업연구원은 접경지역이 수도권정비계획법·군사시설보호구역·개발제한구역·환경규제의 3~4중 중첩규제를 받는다고 지적.",
+    plan:"특구 지정지역에 대한 수도권정비계획법 적용 특례 신설, 접경지역 지원 특별법과의 정합성 정비, 군사시설보호구역 완화 절차 간소화.",
+    visit:"파주시 평화경제특구 담당부서 (편도 약 1시간50분, 실측 필요)",
+    vol:"파주 지역 복지시설 또는 임진강 일원 환경정비",
+    caution:"조문 단위로 대안을 쓸 수 있어 실용성 점수에 가장 유리합니다. 다만 법제 내용이 많아 집필 난이도는 있습니다." },
 
-  { id:"t84", code:"국정과제 84",
-    title:"지역격차 해소, 필수의료 확충, 공공의료 강화",
-    kw:["지역완결형 필수의료","권역책임의료기관","지방의료원","분만·소아·응급","지역필수의사제"],
-    visit:"충북대병원 권역외상센터 + 청주의료원 — 편도 40분",
-    vol:"노인복지관 배식·말벗",
-    pro:"사회적 중요도가 높고 현장 인터뷰의 설득력이 큼.",
-    con:"의료계 갈등과 재정 변수가 커서 6쪽 안에 실현 가능한 대안을 담기 가장 어려움. 고른다면 분만·소아·응급 중 하나로 좁혀야 함." },
+  { id:"p2", code:"후보 2", rec:"추천",
+    title:"1년에 180만 명이 스쳐 갈 뿐 — DMZ 관광의 수용태세",
+    pq:"DMZ는 방한 외국인이 가장 추천하는 한국 여행 경험 1위입니다. 그런데 관광 방식은 여전히 단체·사전예약·군 통제 구조여서, 개별여행객이 대부분인 지금의 수요를 받아내지 못합니다.",
+    kw:["관광 수용태세","개별여행객(FIT)","군 작전통제","체류형 전환"],
+    evid:"2025년 파주시 관광객 788만 명 중 임진각 180.9만 명. 외국인 설문에서 DMZ투어 추천 1위(80%). 반면 방한 외국인의 80.1%가 개별여행객. 일일 입장 3,000명 제한, 매표 09:00~14:30 조기 마감, 월요일 휴무, 제3땅굴·도라전망대는 무장애 시설이 없어 11억 원으로 개선 중.",
+    plan:"FIT 대응 예약·결제 체계, 군–지자체 상시 협의로 운영시간·인원 탄력 운영, 캠프그리브스 등 체류형 콘텐츠, 배후 상권 연계.",
+    visit:"파주 임진각 평화누리 → 도라전망대·제3땅굴 → 캠프그리브스",
+    vol:"임진각 일원 관광지 환경정비·관광안내 지원",
+    caution:"눈으로 보이는 현장이라 인터뷰와 사진이 가장 잘 나옵니다. 군사상황에 따라 당일 통제될 수 있어 대체 일정이 필요합니다." },
 
-  { id:"t107", code:"국정과제 107",
-    title:"3천만 세계인이 찾는 관광산업 기반 구축",
-    kw:["수도권 편중 완화","관광교통 접근성","체류형·워케이션","K-컬처 연계","수용태세 개선"],
-    visit:"청주국제공항 + 청주 스마트관광도시 — 편도 30~40분",
-    vol:"원도심 관광지 환경정비·관광안내",
-    pro:"법령 개정·수용태세 등 각론이 많아 구체적인 대안을 쓰기 유리. 통계와 해외사례가 많아 AI 활용 실적서의 검증 건수도 쌓기 쉬움.",
-    con:"관광은 지자체마다 사업이 많아 ‘또 하나의 활성화 방안’이 되지 않도록 문제 정의를 날카롭게 잡아야 함." }
+  { id:"p3", code:"후보 3", rec:"",
+    title:"320억이 쌓여 있는데 한 건도 못 쓴다 — 남북교류협력기금의 집행 구조",
+    pq:"경기도 남북교류협력기금은 2025년 본예산 320억 원 규모입니다. 그런데 최근 5년간 정수시설·양묘장·스마트온실 같은 직접 지원형 사업은 단 한 건도 집행되지 않았습니다.",
+    kw:["기금 운용","집행률","조건부 설계","중앙–지방 협의"],
+    evid:"경기도의회 지적 — “북한이 문을 열지 않으면 한 푼도 집행할 수 없는 구조”. 현재는 평화통일교육·인식개선 등 간접사업만 추진. 통일부–경기도 대면 협의채널이 4년 만에 열렸다는 지적도 있음.",
+    plan:"기금 용도를 북한 호응이 필요 없는 영역(접경지역 주민 지원, DMZ 생태조사, 통일교육, 북한이탈주민)으로 재설계. 조건부·단계별 집행 구조. 중앙–지방 상시 협의체.",
+    visit:"경기도청 평화협력 담당부서 (거리 실측 필요)",
+    vol:"방문지 인근 복지시설 봉사",
+    caution:"돈이 없어서가 아니라 쓸 설계가 없어서 못 쓰는 문제라, 예산·기금이라는 익숙한 행정 영역으로 다룰 수 있습니다. 현장 그림은 약합니다." },
+
+  { id:"p4", code:"후보 4", rec:"",
+    title:"1,047명에서 223명으로 — 입국 급감 시대의 북한이탈주민 정착지원",
+    pq:"북한이탈주민 입국자는 2019년 1,047명에서 2025년 223명으로 줄었습니다. 그런데 정착지원 체계는 여전히 ‘새로 들어오는 사람’을 전제로 설계돼 있습니다.",
+    kw:["정착지원","하나원 통합","여성 비중 89%","정착 장기화"],
+    evid:"2025년 입국 223명(여성 198·남성 25), 누적 34,537명. 하나원 본원(안성) 입소 50~60명대, 화천 분소 10명 미만으로 통일부가 본원·분소 통합 추진. 고용률 60.5%로 일반국민(63.5%)에 근접했으나 실업률은 4.5%로 일반국민(2.7%)의 1.7배. (2023년 조사 기준, 최신 조사 확인 필요)",
+    plan:"신규 입국자 중심에서 정착 장기화 대응으로 전환, 여성 편중에 맞춘 돌봄·경력 설계, 하나원 통합 후 유휴시설 활용.",
+    visit:"하나원(경기 안성) — 편도 약 50분으로 가장 가까움",
+    vol:"안성 지역 복지시설 봉사",
+    caution:"하나원은 신원보호 시설이라 단체 견학 가능 여부를 통일부에 먼저 확인해야 합니다. 불가 시 남북하나재단·지역 하나센터가 대안입니다." },
+
+  { id:"p5", code:"후보 5", rec:"난이도",
+    title:"10년째 남은 813억 — 개성공단 입주기업 피해 보전",
+    pq:"재가동은 유엔 제재로 우리가 결정할 수 없지만, 피해 보상은 온전히 우리 문제입니다. 그런데 10년이 지나도록 매듭지어지지 않았습니다.",
+    kw:["피해 산정 기준","경협보험금","특별법 제정","국내 보상"],
+    evid:"중단 당시 입주기업 123개사, 2026년 2월 기준 32%가 휴·폐업. 기업협회 추산 피해 1조 5,000억 vs 정부 인정 7,860억 vs 실제 지원 5,787억 → 미지원 813억 원(유동자산 217억 + 투자자산 596억).",
+    plan:"피해 산정 기준의 재설계, 개성공단지원재단 복원 시 역할 재정의.",
+    visit:"개성공단기업협회(서울) · 통일부",
+    vol:"방문지 인근 봉사",
+    caution:"보상 범위·산정이 법리 다툼 영역이고 특별법 요구가 10년째 반복되는 데는 구조적 이유가 있습니다. 보상 전체가 아니라 산정 기준 하나로 좁혀야 6쪽에 담깁니다. 접경지역 현장감은 약합니다." }
 ];
 
 /* ═══════════ 7분임 명단 ═══════════ */
@@ -1045,12 +1109,14 @@ function applyLocal(action, p){
 }
 /* 같은 시트를 함께 쓰므로 roleId 앞머리로 구분합니다.
    "vote:..." 는 주제 투표, "final:..." 은 확정 주제, 나머지는 역할 신청입니다. */
-function isVote(r){ return String(r.roleId).indexOf("vote:") === 0; }
-function isFinal(r){ return String(r.roleId).indexOf("final:") === 0; }
+// 이전 54/84/107 투표 기록은 보존하되 새 집계에서는 제외합니다.
+function isVote(r){ var k = String(r.roleId); return k.indexOf("vote:") === 0 || k.indexOf("vote2:") === 0; }
+function isCurVote(r){ return String(r.roleId).indexOf("vote2:") === 0; }
+function isFinal(r){ var k = String(r.roleId); return k.indexOf("final:") === 0 || k.indexOf("final2:") === 0; }
 function roleRows(){ return rows.filter(function(r){ return !isVote(r) && !isFinal(r); }); }
-function voteRows(){ return rows.filter(isVote); }
-function finalRow(){ return rows.filter(isFinal)[0] || null; }
-function finalTopicId(){ var f = finalRow(); return f ? String(f.roleId).slice(6) : null; }
+function voteRows(){ return rows.filter(isCurVote); }
+function finalRow(){ return rows.filter(function(r){ return String(r.roleId).indexOf("final2:") === 0; })[0] || null; }
+function finalTopicId(){ var f = finalRow(); return f ? String(f.roleId).slice(7) : null; }
 
 function byRole(id){ return roleRows().filter(function(r){ return r.roleId === id; }); }
 // 교번은 앞자리 0 유무가 갈릴 수 있어 정규화해서 비교합니다.
@@ -1187,24 +1253,24 @@ document.getElementById("btn-refresh").addEventListener("click", function(){ pul
 function renderAll(){ renderBoard(); renderTopics(); }
 
 /* ═══════════ 주제 투표 ═══════════ */
-function votesFor(tid){ return voteRows().filter(function(r){ return String(r.roleId).slice(5) === tid; }); }
+function votesFor(tid){ return voteRows().filter(function(r){ return String(r.roleId).slice(6) === tid; }); }
 function myVote(){ return voteRows().filter(isMine)[0] || null; }
 
 function castVote(tid){
   if (!me){ toast("먼저 화면 아래에서 본인 이름을 골라 주세요."); return; }
   var prev = myVote();
-  var add = function(){ return push("add", { roleId:"vote:" + tid, name:me.name, gb:me.gb }); };
+  var add = function(){ return push("add", { roleId:"vote2:" + tid, name:me.name, gb:me.gb }); };
   if (prev){
-    if (String(prev.roleId).slice(5) === tid){ toast("이미 이 주제를 고르셨습니다."); return; }
+    if (String(prev.roleId).slice(6) === tid){ toast("이미 이 주제를 고르셨습니다."); return; }
     push("remove", { id: prev.id }).then(add);
   } else add();
   toast("선택했습니다. 언제든 바꿀 수 있습니다.");
 }
 function setFinal(tid){
   var f = finalRow();
-  var add = function(){ return push("add", { roleId:"final:" + tid, name:"확정", gb:"-" }); };
+  var add = function(){ return push("add", { roleId:"final2:" + tid, name:"확정", gb:"-" }); };
   if (f){
-    if (String(f.roleId).slice(6) === tid){ push("remove", { id:f.id }); toast("확정을 해제했습니다."); return; }
+    if (String(f.roleId).slice(7) === tid){ push("remove", { id:f.id }); toast("확정을 해제했습니다."); return; }
     push("remove", { id:f.id }).then(add);
   } else add();
   toast("이 주제로 확정했습니다.");
@@ -1244,13 +1310,16 @@ function renderTopics(){
     var pct = MEMBERS.length ? Math.round(vs.length / MEMBERS.length * 100) : 0;
     return '<article class="topic' + (isFin ? " won" : mineHere ? " mine" : "") + '">' +
       '<div class="topic-top"><span class="topic-code">' + esc(t.code) + "</span>" +
+      (t.rec ? '<span class="recbadge' + (t.rec === "난이도" ? " hard" : "") + '">' + esc(t.rec) + "</span>" : "") +
       '<span class="votecount' + (vs.length && vs.length === max ? " hot" : "") + '">' + (loaded ? vs.length + "표" : "…") + "</span></div>" +
       "<h3>" + esc(t.title) + "</h3>" +
+      '<p class="pq">' + esc(t.pq) + "</p>" +
       '<div class="kw">' + t.kw.map(function(k){ return "<span>" + esc(k) + "</span>"; }).join("") + "</div>" +
-      '<div class="tline"><b>추천 방문지</b><span>' + esc(t.visit) + "</span></div>" +
+      '<div class="tline"><b>핵심 근거</b><span>' + esc(t.evid) + "</span></div>" +
+      '<div class="tline pro"><b>대안 방향</b><span>' + esc(t.plan) + "</span></div>" +
+      '<div class="tline"><b>현장</b><span>' + esc(t.visit) + "</span></div>" +
       '<div class="tline"><b>연계 봉사</b><span>' + esc(t.vol) + "</span></div>" +
-      '<div class="tline pro"><b>유리한 점</b><span>' + esc(t.pro) + "</span></div>" +
-      '<div class="tline con"><b>부담되는 점</b><span>' + esc(t.con) + "</span></div>" +
+      '<div class="tline con"><b>유의할 점</b><span>' + esc(t.caution) + "</span></div>" +
       '<div class="votebar"><i style="width:' + pct + '%"></i></div>' +
       '<div class="voters">' + vs.map(function(r){ return "<span>" + esc(r.name) + "</span>"; }).join("") + "</div>" +
       '<div class="ev-acts">' +
