@@ -387,43 +387,6 @@ a.btn{display:inline-block; text-decoration:none; text-align:center}
 .aimust b{display:block; font-size:11px; font-family:"IBM Plex Mono",monospace;
   color:var(--muted); letter-spacing:.05em; margin-bottom:3px}
 
-/* ───── 논의 기록 ───── */
-.logstate{font-size:13px; color:var(--muted); background:var(--surface-2);
-  border:1px dashed var(--rule); border-radius:3px; padding:16px; text-align:center; line-height:1.6}
-.logday{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
-  box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden}
-.logday > summary{list-style:none; cursor:pointer; padding:11px 13px;
-  display:flex; align-items:center; gap:8px; border-left:3px solid var(--rule)}
-.logday > summary::-webkit-details-marker{display:none}
-.logday[open] > summary{border-bottom:1px solid var(--rule-soft); border-left-color:var(--accent)}
-.logday summary .dt{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:13.5px;
-  color:var(--ink); font-variant-numeric:tabular-nums}
-.logday summary .cnt{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted)}
-.logday summary .caret{margin-left:auto; font-size:11px; color:var(--muted)}
-.logday[open] summary .caret{transform:rotate(90deg)}
-.logday summary .caret{display:inline-block; transition:transform .12s}
-.logbody{padding:12px 13px 13px}
-.lgrp{margin-bottom:12px}
-.lgrp:last-of-type{margin-bottom:0}
-.lgrp > h4{margin:0 0 6px; font-size:11px; letter-spacing:.06em;
-  font-family:"IBM Plex Mono",monospace; font-weight:600; text-transform:uppercase}
-.lgrp.g-dec > h4{color:var(--ok)} .lgrp.g-todo > h4{color:var(--accent)}
-.lgrp.g-open > h4{color:var(--urgent)} .lgrp.g-memo > h4{color:var(--muted)}
-.lgrp ul{margin:0; padding-left:0; list-style:none}
-.lgrp li{position:relative; padding-left:15px; margin-bottom:5px;
-  font-size:13.4px; line-height:1.55; color:var(--ink-2)}
-.lgrp li::before{content:""; position:absolute; left:2px; top:8px;
-  width:5px; height:5px; border-radius:50%; background:var(--rule)}
-.lgrp.g-dec li::before{background:var(--ok)}
-.lgrp.g-todo li::before{background:var(--accent)}
-.lgrp.g-open li::before{background:var(--urgent)}
-.lgrp li b{color:var(--ink)}
-.lgrp li .who{font-weight:600; color:var(--ink)}
-.lgrp li .by{display:inline-block; margin-left:5px; padding:1px 6px; border-radius:2px;
-  font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:600;
-  background:var(--urgent-soft); color:var(--urgent); vertical-align:1px}
-.logfoot{margin-top:12px; padding-top:10px; border-top:1px solid var(--rule-soft);
-  display:flex; gap:7px; flex-wrap:wrap}
 .note-plain{margin-top:16px; background:var(--surface); border:1px solid var(--rule); border-radius:3px;
   padding:12px 14px; font-size:12.8px; color:var(--ink-2); line-height:1.6}
 
@@ -452,7 +415,6 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     </div>
     <div class="vtabs" role="tablist">
       <button class="vtab" role="tab" id="vt-topic" aria-selected="true" aria-controls="view-topic">주제</button>
-      <button class="vtab" role="tab" id="vt-log" aria-selected="false" aria-controls="view-log">논의</button>
       <button class="vtab" role="tab" id="vt-duty" aria-selected="false" aria-controls="view-duty">분장</button>
       <button class="vtab" role="tab" id="vt-ai" aria-selected="false" aria-controls="view-ai">AI</button>
       <button class="vtab" role="tab" id="vt-cal" aria-selected="false" aria-controls="view-cal">일정</button>
@@ -526,17 +488,6 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
 </div>
 
 <!-- ══════════ 분장 ══════════ -->
-<!-- ══════════ 논의 ══════════ -->
-<div class="wrap" id="view-log" role="tabpanel" aria-labelledby="vt-log" hidden>
-  <div class="sec-head"><h2>오늘의 논의사항</h2><span id="logMeta">불러오는 중…</span></div>
-  <div id="logList"><div class="logstate">불러오는 중…</div></div>
-  <div class="note-plain">
-    오픈채팅방 대화를 정리한 기록입니다. 최신 날짜가 맨 위에 펼쳐져 있고,
-    지난 날짜는 제목을 누르면 열립니다.<br>
-    빠진 내용이나 잘못 적힌 것이 있으면 채팅방에 알려주세요.
-  </div>
-</div>
-
 <div class="wrap" id="view-duty" role="tabpanel" aria-labelledby="vt-duty" hidden>
   <div class="sec-head"><h2>분임 임원</h2><span>직책별 업무</span></div>
 
@@ -630,6 +581,9 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     <div><div class="t">발표자료</div><div class="v">PPT 표지 제외 20장 이상</div></div>
   </div>
   <div class="aimust"><b>통과 조건</b>실적서와 발표자료를 <b style="display:inline">모두</b> 제출해야 통과됩니다.</div>
+  <div class="aimust"><b>제출물 담당</b>
+    실적서 HWP — 장환희 &nbsp;·&nbsp; 발표 PPT — 류지연(주)·전상민 &nbsp;·&nbsp; 검증 자료 — 유진아(주)·황강선·이선기
+  </div>
 
   <div class="sec-head"><h2>평가요소</h2><span>무엇을 보여줄 것인가</span></div>
   <div class="aitbl">
@@ -654,12 +608,14 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
       </ul>
     </div>
     <div class="aicol">
-      <div class="n">02</div><h4>AI 기록·검증 담당</h4>
+      <div class="n">02</div><h4>AI 기록·검증·제작 담당</h4>
       <div class="sub">업무분장 기준 담당자</div>
       <ul>
         <li><b>기록</b> 장환희 — 프롬프트 원장 관리</li>
         <li><b>검증</b> 유진아(주)·황강선·이선기</li>
         <li>원자료 대조 · 수정 건수 누적</li>
+        <li><b>제작</b> 류지연(주)·전상민</li>
+        <li>발표 PPT 제작 + 최종 서식 교열</li>
       </ul>
     </div>
     <div class="aicol">
@@ -704,7 +660,6 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     이 화면은 <b>팀 공유용 5장</b>을 옮긴 것입니다. 최종 제출물은 이것과 별개로
     <b>AI 활용 실적서(HWP 본문 3쪽 이내)</b>와 <b>본 발표 PPT(표지 제외 20장 이상)</b>를 준비합니다.
     <div style="margin-top:9px">
-      <a class="btn sm" href="7분임_AI활용_운영안.pptx" download>원본 PPT 내려받기</a>
       <button class="btn sm" id="aiKakao">카톡용 요약 복사</button>
     </div>
   </div>
@@ -1376,6 +1331,11 @@ var ACCT = { id: "nhi5191team7@gmail.com", pw: "nhiteam7!" };
       "· 발표 PPT 표지 제외 20장 이상",
       "· 둘 다 내야 통과됩니다",
       "",
+      "▶ 제출물 담당",
+      "실적서 HWP  장환희",
+      "발표 PPT  류지연(주)·전상민",
+      "검증 자료  유진아(주)·황강선·이선기",
+      "",
       "▶ 핵심",
       "프롬프트 기록보다 검증과 개선의 증빙이 중요",
       "",
@@ -1393,141 +1353,8 @@ var ACCT = { id: "nhi5191team7@gmail.com", pw: "nhiteam7!" };
   });
 })();
 
-/* ═══════════ 논의 기록 (log.txt) ═══════════ */
-/*
-   log.txt 형식 — 띄어쓰기나 줄 순서가 조금 달라도 읽습니다.
-
-     ## 9.17 (목)
-     [결정]
-     - 분임 정책연구 제목 확정
-     [할 일]
-     - 정종주 · 파주시 섭외 통화 (~9.29)
-     [미결]
-     - 발표자료 PPT 별도 여부
-
-   ## 로 날짜, [ ] 로 묶음, - 로 항목입니다.
-   항목 앞의 "이름 ·" 은 담당자로, 끝의 "(~9.29)" 는 기한으로 표시됩니다.
-*/
-function esc(s){
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
-                  .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-function grpClass(label){
-  if (/결정|확정/.test(label)) return "g-dec";
-  if (/할\s*일|해야|과제|액션/.test(label)) return "g-todo";
-  if (/미결|쟁점|확인|질문|보류/.test(label)) return "g-open";
-  return "g-memo";
-}
-function parseLog(text){
-  var days = [], cur = null, grp = null;
-  var lines = String(text).replace(/\r/g, "").split("\n");
-  for (var i = 0; i < lines.length; i++){
-    var ln = lines[i].trim();
-    if (!ln || ln.indexOf("//") === 0) continue;
-
-    var mDay = ln.match(/^#{1,3}\s*(.+)$/);
-    if (mDay){ cur = { title: mDay[1].trim(), groups: [] }; days.push(cur); grp = null; continue; }
-    if (!cur) continue;
-
-    var mGrp = ln.match(/^\[(.+?)\]\s*$/) || ln.match(/^>\s*(.+)$/);
-    if (mGrp){ grp = { label: mGrp[1].trim(), items: [] }; cur.groups.push(grp); continue; }
-
-    var mIt = ln.match(/^[-*•·]\s*(.+)$/);
-    var body = mIt ? mIt[1].trim() : ln;
-    if (!grp){ grp = { label: "메모", items: [] }; cur.groups.push(grp); }
-    grp.items.push(body);
-  }
-  // 날짜(m.d)를 읽어 최신순으로 정렬합니다. 못 읽으면 파일 순서를 유지합니다.
-  days.forEach(function(d, i){
-    var m = d.title.match(/(\d{1,2})\s*[.\-/]\s*(\d{1,2})/);
-    d._k = m ? (parseInt(m[1],10) * 100 + parseInt(m[2],10)) : -1;
-    d._i = i;
-  });
-  var ok = days.every(function(d){ return d._k >= 0; });
-  if (ok) days.sort(function(a,b){ return b._k - a._k || a._i - b._i; });
-  return days;
-}
-function logItemHtml(raw){
-  var due = "";
-  var s = raw.replace(/\s*\((\s*[~–-][^)]*)\)\s*$/, function(_, d){
-    due = d.trim(); return "";
-  }).trim();
-  var who = "";
-  var mw = s.match(/^([^·|]{1,16}?)\s*·\s*(.+)$/);
-  if (mw){ who = mw[1].trim(); s = mw[2].trim(); }
-  var html = esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
-  return "<li>"
-    + (who ? '<span class="who">' + esc(who) + "</span> " : "")
-    + html
-    + (due ? '<span class="by">' + esc(due) + "</span>" : "")
-    + "</li>";
-}
-function dayPlainText(d){
-  var out = ["[7분임] " + d.title + " 논의 정리", ""];
-  d.groups.forEach(function(g){
-    out.push("▶ " + g.label);
-    g.items.forEach(function(it){ out.push("· " + it.replace(/\*\*(.+?)\*\*/g, "$1")); });
-    out.push("");
-  });
-  return out.join("\n").trim();
-}
-var LOG_DAYS = [];
-function renderLog(days){
-  LOG_DAYS = days;
-  var box = document.getElementById("logList");
-  var meta = document.getElementById("logMeta");
-  if (!days.length){
-    box.innerHTML = '<div class="logstate">아직 올라온 기록이 없습니다.</div>';
-    meta.textContent = "";
-    return;
-  }
-  meta.textContent = "최근 " + days[0].title.replace(/\s+/g, " ");
-  var html = "";
-  days.forEach(function(d, i){
-    var n = d.groups.reduce(function(a, g){ return a + g.items.length; }, 0);
-    html += '<details class="logday"' + (i === 0 ? " open" : "") + ">"
-      + '<summary><span class="dt">' + esc(d.title) + "</span>"
-      + '<span class="cnt">' + n + "건</span>"
-      + '<span class="caret">▶</span></summary>'
-      + '<div class="logbody">';
-    d.groups.forEach(function(g){
-      html += '<div class="lgrp ' + grpClass(g.label) + '"><h4>' + esc(g.label) + "</h4><ul>";
-      g.items.forEach(function(it){ html += logItemHtml(it); });
-      html += "</ul></div>";
-    });
-    html += '<div class="logfoot">'
-      + '<button class="btn sm" data-logcopy="' + i + '">카톡용 복사</button>'
-      + "</div></div></details>";
-  });
-  box.innerHTML = html;
-}
-document.getElementById("logList").addEventListener("click", function(ev){
-  var b = ev.target.closest("[data-logcopy]");
-  if (!b) return;
-  var d = LOG_DAYS[parseInt(b.getAttribute("data-logcopy"), 10)];
-  if (d) copyText(dayPlainText(d), "복사했습니다");
-});
-(function loadLog(){
-  var box = document.getElementById("logList");
-  var meta = document.getElementById("logMeta");
-  function fail(msg){
-    box.innerHTML = '<div class="logstate">' + msg + "</div>";
-    meta.textContent = "";
-  }
-  if (!window.fetch){ fail("이 브라우저에서는 기록을 불러올 수 없습니다."); return; }
-  fetch("log.txt?v=" + Date.now(), { cache: "no-store" })
-    .then(function(r){
-      if (!r.ok) throw new Error(String(r.status));
-      return r.text();
-    })
-    .then(function(t){ renderLog(parseLog(t)); })
-    .catch(function(){
-      fail("기록을 불러오지 못했습니다.<br>잠시 뒤 새로고침해 주세요.");
-    });
-})();
-
 /* ═══════════ 뷰 전환 ═══════════ */
-var VIEWS = ["topic", "log", "duty", "ai", "cal"];
+var VIEWS = ["topic", "duty", "ai", "cal"];
 function showView(which){
   if (VIEWS.indexOf(which) < 0) which = "topic";
   VIEWS.forEach(function(v){
