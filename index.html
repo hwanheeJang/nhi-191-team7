@@ -10,22 +10,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
-<script>
-/* ═══════════════════════════════════════════════════════════
-   설정 — 이 세 줄만 고치면 됩니다
-   ═══════════════════════════════════════════════════════════ */
-var CONFIG = {
-  // Google Apps Script 웹앱 URL. 비워두면 역할 보드가 '혼자 보기 모드'로 동작합니다.
-  // (일정 캘린더는 이 설정과 무관하게 항상 동작합니다.)
-  API_URL: "https://script.google.com/macros/s/AKfycbxRmN15lDz2C6qakdR_bkVjehhBYSQ51LXbMgXXGtLFBLtWw0wmRTN1h8qyS8HjMutLQQ/exec",
-
-  // 관리자(분임장·연구장) 코드. 주소 뒤에 ?admin=코드 를 붙이면 확정/해제 가능.
-  ADMIN_CODE: "n7-l40q80",
-
-  // 역할 보드 갱신 주기(초)
-  POLL_SECONDS: 5
-};
-</script>
 
 <style>
 :root{
@@ -69,7 +53,6 @@ body{
   padding-top:env(safe-area-inset-top, 0px);
   padding-bottom:calc(28px + env(safe-area-inset-bottom, 0px));
 }
-body.role-mode{padding-bottom:calc(84px + env(safe-area-inset-bottom, 0px))}
 img{max-width:100%}
 [hidden]{display:none !important}
 button{font-family:inherit}
@@ -95,7 +78,7 @@ header.mast{position:sticky; top:0; z-index:30;
 
 .vtabs{display:flex; gap:2px; margin-top:8px}
 .vtab{flex:1; background:none; border:none; border-bottom:2px solid transparent;
-  padding:9px 4px 8px; font-size:14px; font-weight:700; color:var(--muted); cursor:pointer}
+  padding:9px 2px 8px; font-size:13.5px; font-weight:700; color:var(--muted); cursor:pointer; white-space:nowrap}
 .vtab[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--ink)}
 .vtab:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
 
@@ -241,13 +224,63 @@ a.btn{display:inline-block; text-decoration:none; text-align:center}
 .nobody{font-size:12.5px; color:var(--urgent); font-weight:600}
 .acts{display:flex; gap:7px; margin-top:11px; flex-wrap:wrap}
 
-.idbar{position:fixed; left:0; right:0; bottom:0; z-index:40;
-  background:color-mix(in srgb, var(--surface) 96%, transparent); backdrop-filter:blur(10px);
-  border-top:1px solid var(--rule); padding:10px 16px calc(10px + env(safe-area-inset-bottom, 0px))}
-.idbar-in{max-width:720px; margin:0 auto; display:flex; gap:7px; align-items:center}
-.idbar select{flex:1 1 auto; min-width:0; font-family:inherit; font-size:15px; font-weight:600;
-  background:var(--paper); color:var(--ink); border:1px solid var(--rule); border-radius:3px; padding:9px 11px}
-.idbar select:focus{outline:2px solid var(--accent); outline-offset:-1px}
+
+/* ───── 결정 카드 / 분장 ───── */
+.dcard{background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--rule);
+  border-radius:3px; padding:13px 15px; box-shadow:var(--shadow); margin-bottom:10px}
+.dcard.key{border-left-color:var(--accent)} .dcard.warn{border-left-color:var(--urgent)}
+.dcard.ok{border-left-color:var(--ok)}
+.dcard .dt{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.08em;
+  color:var(--muted); font-weight:600; margin-bottom:5px}
+.dcard.key .dt{color:var(--accent)} .dcard.warn .dt{color:var(--urgent)} .dcard.ok .dt{color:var(--ok)}
+.dcard p{margin:0; font-size:13.4px; color:var(--ink-2); line-height:1.65}
+.dcard b{color:var(--ink)}
+.dcard em{font-style:normal; color:var(--muted); font-size:12.3px}
+
+.todo{display:grid; grid-template-columns:24px 1fr; gap:11px; background:var(--surface);
+  border:1px solid var(--rule); border-radius:3px; padding:12px 14px; margin-bottom:9px}
+.todo .n{font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); font-size:14px}
+.todo b{font-size:14.5px} .todo p{margin:3px 0 0; font-size:12.9px; color:var(--ink-2); line-height:1.6}
+.todo .by{display:inline-block; margin-top:6px; font-size:11px; font-family:"IBM Plex Mono",monospace;
+  background:var(--surface-2); color:var(--muted); border:1px solid var(--rule-soft); padding:2px 8px; border-radius:2px}
+
+.offcard{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  padding:14px 15px; box-shadow:var(--shadow); margin-bottom:11px; border-left:3px solid var(--rule)}
+.offcard.lead{border-left-color:var(--urgent)} .offcard.res{border-left-color:var(--accent)}
+.offcard.sm{margin-bottom:0}
+.oh{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:9px}
+.obadge{font-size:11px; font-weight:700; letter-spacing:.05em; padding:3px 9px; border-radius:2px;
+  background:var(--urgent-soft); color:var(--urgent)}
+.offcard.res .obadge{background:var(--accent-soft); color:var(--accent)}
+.obadge.sm2{background:var(--surface-2); color:var(--muted); border:1px solid var(--rule-soft)}
+.oh b{font-size:17px; font-family:"Gowun Batang",serif}
+.oorg{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--muted)}
+.offcard ul{margin:0; padding-left:16px; font-size:13.2px; color:var(--ink-2)}
+.offcard li{margin-bottom:4px}
+.offcard b{color:var(--ink)}
+.orole{margin-top:10px; font-size:11.5px; font-family:"IBM Plex Mono",monospace; color:var(--muted);
+  border-top:1px solid var(--rule-soft); padding-top:8px}
+.dues{margin-top:10px; display:grid; gap:5px}
+.due{display:grid; grid-template-columns:104px 1fr; gap:9px; background:var(--surface-2);
+  border-radius:2px; padding:7px 10px; font-size:12.8px}
+.due .d{font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--urgent); font-variant-numeric:tabular-nums}
+.due .t{color:var(--ink)}
+.due em{font-style:normal; color:var(--muted); font-size:11.5px}
+.split2{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:11px}
+@media (max-width:540px){ .split2{grid-template-columns:1fr} .split2 .offcard.sm{margin-bottom:0} }
+
+.drole{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  padding:11px 14px; margin-bottom:8px}
+.drole-h{display:flex; align-items:baseline; gap:8px; margin-bottom:7px}
+.drole-h .no{font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600; color:var(--muted)}
+.drole-h b{font-size:14.5px}
+.drole-h .team{margin-left:auto; font-size:10.5px; color:var(--muted); background:var(--surface-2);
+  border:1px solid var(--rule-soft); padding:2px 7px; border-radius:2px}
+.dp{display:grid; grid-template-columns:auto 1fr; gap:8px; padding:4px 0; font-size:13px; align-items:baseline}
+.dp .pn{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--muted); white-space:nowrap}
+.dp .nm{font-weight:600}
+.dp .og{color:var(--muted); font-size:12.3px}
+.dp.main .nm{color:var(--accent)}
 
 /* ───── 주제 투표 ───── */
 .fixedtopic{margin-top:16px; background:var(--accent-soft);
@@ -321,12 +354,11 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
         <h1>7분임 상황판</h1>
         <p id="subline">제191기 5급 승진관리자과정 · 18명</p>
       </div>
-      <div class="live" id="livewrap" hidden><span class="dot-live off" id="dot"></span><span id="livetxt">연결 중</span></div>
     </div>
     <div class="vtabs" role="tablist">
       <button class="vtab" role="tab" id="vt-topic" aria-selected="true" aria-controls="view-topic">주제</button>
+      <button class="vtab" role="tab" id="vt-duty" aria-selected="false" aria-controls="view-duty">분장</button>
       <button class="vtab" role="tab" id="vt-cal" aria-selected="false" aria-controls="view-cal">일정</button>
-      <button class="vtab" role="tab" id="vt-role" aria-selected="false" aria-controls="view-role">역할</button>
     </div>
   </div>
 </header>
@@ -334,32 +366,126 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
 <!-- ══════════ 주제 ══════════ -->
 <div class="wrap" id="view-topic" role="tabpanel" aria-labelledby="vt-topic">
   <div class="fixedtopic">
-    <div class="l">분임 정책연구 주제 · 확정</div>
-    <h2>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」</h2>
-    <p>통일부 · 평화경제특구 조성, DMZ 국제 생태·평화관광 협력지구 개발, 경제협력 사업 재개</p>
+    <div class="l">분임 정책연구 제목 · 확정 (9.17)</div>
+    <h2>세계인이 찾는 DMZ 평화관광정책 개선방안</h2>
+    <p>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」(통일부) · 9.17 분임장 확정</p>
   </div>
 
-  <div class="note-key">
-    <b>이 과제는 절반이 북한의 호응 없이는 움직일 수 없는 영역입니다.</b>
-    개성공단 재가동은 유엔 안보리 결의 2375호가 합작사업을 금지하고 있고, 금강산관광은 현금 유입 제재에 걸립니다.
-    여기에 문제를 걸면 대안이 전부 “여건이 조성되면”으로 끝나 실용성 20점·타당성 15점을 잃습니다.
-    아래 다섯 후보는 모두 <b>우리가 지금 집행할 수 있는 국내 영역</b>으로 좁힌 것들입니다.
+  <div class="sec-head"><h2>9.17 토의에서 정리된 것</h2><span>보고서의 뼈대</span></div>
+
+  <article class="dcard key">
+    <div class="dt">문제 구조</div>
+    <p>DMZ 관광의 문제는 <b>한반도 긴장 상황에 따라 관광 활성화가 곤란하다</b>는 것. 핵심관계자는 <b>유엔군사령부·국방부</b>, 이해관계자는 <b>접경지역 지자체와 주민, 상공인, 여행업체</b>. 먼저 “누구의 문제를 푸는가”를 정해야 방향이 선다. <em>— 홍병성</em></p>
+  </article>
+
+  <article class="dcard">
+    <div class="dt">핵심 쟁점</div>
+    <p>과거에는 DMZ 내부까지 둘레길이 조성돼 있었으나 현재는 접경선 이후로 후퇴한 상태. <b>재추진 결정권은 유엔군사령관의 권한</b>에 달려 있음. 접경지역 상공인·여행업체의 경제적 이득과 평화체제 구축을 근거로 <b>유엔사를 설득하는 방향</b>이 하나의 축이 될 수 있음. <em>— 홍병성</em></p>
+  </article>
+
+  <article class="dcard warn">
+    <div class="dt">가장 중요한 지적</div>
+    <p>정책연구보고서는 <b>특정 정책·제도·사업의 문제점을 개선하는 틀</b>이어야 하는데, 자칫 “관광 사업 활성화 방안”이 되어버릴 수 있음. 제도의 개요·예산 투입 현황·성과지표가 나오려면 <b>분석 대상 제도를 하나 특정</b>해야 함. <em>— 전상민</em></p>
+  </article>
+
+  <article class="dcard ok">
+    <div class="dt">그 해법</div>
+    <p>DMZ 평화관광에는 <b>현재 투입되는 예산이 있음</b>. 따라서 문제 해결 시 <b>관광객 수 또는 증가율로 KPI 설정이 가능</b>함. 제목에 ‘관광’을 넣어 범위를 좁힌 것도 KPI를 잡기 위해서임. <em>— 홍병성</em></p>
+  </article>
+
+  <article class="dcard">
+    <div class="dt">서술 범위</div>
+    <p>현황 및 문제점은 <b>내국인·외국인 양 측면</b>으로 나누어 구성. 외국인만 특정하면 모수가 작고, 나누면 담을 내용이 다양해짐. <em>— 홍민성·유진아·김기현</em></p>
+  </article>
+
+  <article class="dcard">
+    <div class="dt">결론의 방향</div>
+    <p>결론을 “더 많은 외국인을 유치하자”가 아니라 <b>“지역과 환경을 살리면서 어떻게 오래도록 평화의 메시지를 전할 것인가”</b>로 잡으면 훨씬 깊이 있는 개선방안이 나옴. <em>— 최낙중</em></p>
+  </article>
+
+  <div class="sec-head"><h2>이제 해야 할 일</h2><span>9.22 계획서까지</span></div>
+
+  <div class="todo"><span class="n">1</span><div><b>분석 대상 제도 특정</b><p>예산·성과지표가 나오는 단위를 하나 고릅니다. 후보: DMZ 평화의 길(문체부·행안부 등 공동), 파주 DMZ 평화관광(지자체 운영), 접경지역 발전종합계획 관광 부문. <b>전상민 님 지적에 대한 답</b>이 여기서 나옵니다.</p><span class="by">연구조사반</span></div></div>
+
+  <div class="todo"><span class="n">2</span><div><b>“누구의 문제인가” 확정</b><p>유엔사·국방부(출입 통제) / 접경지역 주민·상공인(경제) / 관광객(불편) 중 무엇을 주된 고객으로 둘지 정합니다. 이 선택이 Ⅲ장 개선방안의 성격을 결정합니다.</p><span class="by">분임 전체</span></div></div>
+
+  <div class="todo"><span class="n">3</span><div><b>예산·성과지표 확보</b><p>현재 투입 예산 규모와 관광객 통계를 원자료에서 뽑습니다. 관광지식정보시스템(know.tour.go.kr), 공공데이터포털의 파주시 DMZ평화관광 이용현황.</p><span class="by">01 통계·데이터</span></div></div>
+
+  <div class="todo"><span class="n">4</span><div><b>KPI 설정</b><p>관광객 수 또는 증가율을 목표 지표로 삼되, 기준연도와 산출식을 명시합니다.</p><span class="by">08 Ⅲ개선방안</span></div></div>
+
+  <div class="todo"><span class="n">5</span><div><b>방문지 섭외</b><p>파주 코스 유력 — 임진각 → 제3땅굴 → 도라전망대 → 도라산역 → 통일촌마을. 파주시 DMZ평화관광 사전예약, 군사상황에 따라 당일 통제될 수 있어 대체 일정 필요.</p><span class="by">13 방문지 섭외</span></div></div>
+
+  <div class="todo"><span class="n">6</span><div><b>봉사활동지 섭외</b><p>10.8(목) 9:30~15:00 중 4시간, 19명 수용 가능한 곳. 파주권에서 찾으면 동선이 맞습니다.</p><span class="by">15 봉사 섭외</span></div></div>
+
+  <div class="dcard warn" style="margin-top:14px">
+    <div class="dt">아직 확인 안 된 것</div>
+    <p>분임 정책연구보고서는 한글(hwp)로 내는데, <b>발표자료를 PPT로 따로 만들어야 하는지</b>가 아직 확인되지 않았습니다(류지연 님 질문). 분임장이 확인 중입니다.<br>
+    참고로 분임장 전언에 따르면 <b>마지막 주 발표는 PPT로 안 해도 되지만, PPT로 하면 일정 부분 가점</b>이 있다고 합니다.</p>
   </div>
 
-  <div class="finalbox" id="finalbox" hidden></div>
+  <div class="note-plain" style="margin-top:12px">
+    위 내용은 9.17 단체 카톡 토의를 정리한 것입니다. 발언자는 참고용으로 표시했습니다.
+  </div>
+</div>
 
-  <div class="mecard" style="margin-top:16px">
-    <h2>투표 현황</h2>
-    <div class="who" id="voteWho">아직 아무도 투표하지 않았습니다.</div>
-    <div class="pending-list" id="voteePending"></div>
+<!-- ══════════ 분장 ══════════ -->
+<div class="wrap" id="view-duty" role="tabpanel" aria-labelledby="vt-duty" hidden>
+  <div class="sec-head"><h2>분임 임원</h2><span>직책별 업무</span></div>
+
+  <article class="offcard lead">
+    <div class="oh"><span class="obadge">분임장</span><b>정종주</b><span class="oorg">112 · 법무부</span></div>
+    <ul>
+      <li>분임 총괄, 대외 연락</li>
+      <li><b>방문기관 사전 협의</b> — 인재원이 협조공문을 일괄 발송하지만, 발송 전 사전 협의는 분임장·연구장이 직접</li>
+      <li><b>현장학습비·숙박비 일괄 수령</b> 후 분임원에게 지급</li>
+      <li>결강·조퇴·지각 사전 보고 접수</li>
+    </ul>
+    <div class="orole">실무 02 법령·제도 · 13 방문지 섭외 · 14 동선·숙소 · 15 봉사 섭외</div>
+  </article>
+
+  <article class="offcard res">
+    <div class="oh"><span class="obadge">연구장</span><b>구현지</b><span class="oorg">121 · 법무부</span></div>
+    <ul>
+      <li><b>나라배움터 대표 제출</b> — 분임 제출물은 연구장이 제출</li>
+      <li>방문기관 사전 협의 (분임장과 함께)</li>
+      <li>소주제 구체화·의견 취합 주재</li>
+    </ul>
+    <div class="dues">
+      <div class="due"><span class="d">9.22(화) 09:00</span><span class="t">분임 정책연구계획서</span></div>
+      <div class="due"><span class="d">10.1(목) 17:00</span><span class="t">정책현장학습 세부계획서<br><em>사회봉사활동 계획서와 제출란 다름</em></span></div>
+      <div class="due"><span class="d">10.12(월) 17:00</span><span class="t">분임 정책연구보고서</span></div>
+      <div class="due"><span class="d">10.13(화) 14:00</span><span class="t">현장학습 결과보고서<br><em>사회봉사활동 결과보고서와 별건</em></span></div>
+    </div>
+    <div class="orole">실무 05 이해관계자·인터뷰 · 06 Ⅰ검토배경·Ⅱ현황</div>
+  </article>
+
+  <div class="split2">
+    <article class="offcard sm">
+      <div class="oh"><span class="obadge sm2">총무</span><b>김소영</b><span class="oorg">120 · 국가데이터처</span></div>
+      <ul>
+        <li>경비 정산 — 일비 12,500원 + 식비 25,000원 = <b>1인 75,000원</b>(2일분)</li>
+        <li>숙박비 신청서·영수증 (상한 서울 10만 / 광역시 8만 / 그 밖 7만원)</li>
+        <li>경비 정산내역서 작성 (결과보고서 첨부)</li>
+      </ul>
+      <div class="orole">실무 14 동선·숙소·연락망</div>
+    </article>
+    <article class="offcard sm">
+      <div class="oh"><span class="obadge sm2">AI담당</span><b>장환희</b><span class="oorg">124 · 농촌진흥청</span></div>
+      <ul>
+        <li>AI Tool 구독 (분임 1개, 3만원 범위)</li>
+        <li>영수증 제출 → <code>imsmin0523@korea.kr</code></li>
+        <li><b>10.12(월) 14:00</b> AI 활용 실적서 + 발표자료<br>PPT 20장↑ 또는 영상 18분↑</li>
+      </ul>
+      <div class="orole">실무 10 AI 프롬프트 기록</div>
+    </article>
   </div>
 
-  <div class="sec-head"><h2>세부 주제 다섯 중 하나를 골라주세요</h2><span id="voteDue">~9.18(금)</span></div>
-  <div id="topicList"></div>
+  <div class="sec-head"><h2>업무별 담당</h2><span>15개 역할 · 36건</span></div>
+  <div id="dutyList"></div>
 
   <div class="note-plain">
-    한 사람이 하나만 고를 수 있고, 언제든 바꿀 수 있습니다. 최종 확정은 분임장·연구장이 합니다.
-    후보 1·2는 현장이 파주로 겹쳐서, 하나를 본론으로 두고 다른 하나를 추진계획에서 연계하는 구성도 가능합니다.
+    먼저 적힌 분이 주담당입니다. 자료는 해당 역할 주담당에게 모아 주세요.
+    변경이 필요하면 <b>신청 탭</b>에서 조정한 뒤 분임장·연구장이 확정합니다.
   </div>
 </div>
 
@@ -439,50 +565,6 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     평가 일정은 운영상황에 따라 변동될 수 있습니다.
     ‘분임 자체 목표’로 표시된 항목은 공식 일정이 아니라 우리 분임이 스스로 잡은 기한입니다.
   </footer>
-</div>
-
-<!-- ══════════ 역할 ══════════ -->
-<div class="wrap" id="view-role" role="tabpanel" aria-labelledby="vt-role" hidden>
-  <div class="banner" id="banner" hidden></div>
-
-  <div class="summary">
-    <div class="stat a"><div class="n" id="s-conf">0</div><div class="l">확정</div></div>
-    <div class="stat b"><div class="n" id="s-want">0</div><div class="l">신청만</div></div>
-    <div class="stat c"><div class="n" id="s-none">15</div><div class="l">빈자리</div></div>
-  </div>
-  <div class="bar"><i class="f" id="bar-f" style="width:0%"></i><i class="p" id="bar-p" style="width:0%"></i></div>
-
-  <div class="mecard">
-    <h2>내 현황</h2>
-    <div class="who" id="mewho">화면 아래에서 본인 이름을 고르면 신청할 수 있습니다.</div>
-    <div class="minelist" id="mine"></div>
-  </div>
-
-  <div class="mecard" style="border-left-color:var(--urgent)">
-    <h2>아직 신청하지 않은 사람</h2>
-    <div class="who" id="pendingWho"></div>
-    <div class="pending-list" id="pendingList"></div>
-  </div>
-
-  <div class="filters" role="group" aria-label="보기 필터">
-    <button class="chip" data-f="all" aria-pressed="true">전체</button>
-    <button class="chip" data-f="open" aria-pressed="false">빈자리만</button>
-    <button class="chip" data-f="mine" aria-pressed="false">내 역할</button>
-  </div>
-
-  <div id="board"></div>
-
-  <footer>
-    <p>역할 신청은 서로 겹쳐도 됩니다. 최종 확정은 분임장·연구장이 합니다.</p>
-    <p id="adminnote" hidden><b>관리자 모드</b> — 확정/해제/삭제가 가능합니다.</p>
-  </footer>
-</div>
-
-<div class="idbar" id="idbar" hidden>
-  <div class="idbar-in">
-    <select id="in-member" aria-label="내 이름 선택"></select>
-    <button class="btn ghost" id="btn-refresh" title="새로고침">↻</button>
-  </div>
 </div>
 
 <script>
@@ -740,58 +822,7 @@ EVENTS.sort(function(a, b){
   return (a.t || "00:00").localeCompare(b.t || "00:00");
 });
 
-/* ═══════════ 정책연구 주제 후보 ═══════════ */
-var TOPICS = [
-  { id:"p1", code:"후보 1", rec:"추천",
-    title:"한 손으로 주고 다른 손으로 묶는다 — 평화경제특구와 수도권 규제의 충돌",
-    pq:"평화경제특구법은 법인세 100% 감면(3년)과 40여 개 인허가 의제를 줍니다. 그런데 경기 접경지역은 「수도권정비계획법」상 여전히 ‘수도권’입니다. 인센티브와 규제가 같은 땅에서 맞부딪칩니다.",
-    kw:["평화경제특구법","수도권정비계획법","중첩규제","접경지역 지원 특별법"],
-    evid:"연천군은 인구감소지역이면서 법적으로 ‘수도권’이라 비수도권 대상 투자보조금·세액공제에서 배제됩니다. 연천 BIX 산업단지 분양률은 29% 수준. 산업연구원은 접경지역이 수도권정비계획법·군사시설보호구역·개발제한구역·환경규제의 3~4중 중첩규제를 받는다고 지적.",
-    plan:"특구 지정지역에 대한 수도권정비계획법 적용 특례 신설, 접경지역 지원 특별법과의 정합성 정비, 군사시설보호구역 완화 절차 간소화.",
-    visit:"파주시 평화경제특구 담당부서 (편도 약 1시간50분, 실측 필요)",
-    vol:"파주 지역 복지시설 또는 임진강 일원 환경정비",
-    caution:"조문 단위로 대안을 쓸 수 있어 실용성 점수에 가장 유리합니다. 다만 법제 내용이 많아 집필 난이도는 있습니다." },
 
-  { id:"p2", code:"후보 2", rec:"추천",
-    title:"1년에 180만 명이 스쳐 갈 뿐 — DMZ 관광의 수용태세",
-    pq:"DMZ는 방한 외국인이 가장 추천하는 한국 여행 경험 1위입니다. 그런데 관광 방식은 여전히 단체·사전예약·군 통제 구조여서, 개별여행객이 대부분인 지금의 수요를 받아내지 못합니다.",
-    kw:["관광 수용태세","개별여행객(FIT)","군 작전통제","체류형 전환"],
-    evid:"2025년 파주시 관광객 788만 명 중 임진각 180.9만 명. 외국인 설문에서 DMZ투어 추천 1위(80%). 반면 방한 외국인의 80.1%가 개별여행객. 일일 입장 3,000명 제한, 매표 09:00~14:30 조기 마감, 월요일 휴무, 제3땅굴·도라전망대는 무장애 시설이 없어 11억 원으로 개선 중.",
-    plan:"FIT 대응 예약·결제 체계, 군–지자체 상시 협의로 운영시간·인원 탄력 운영, 캠프그리브스 등 체류형 콘텐츠, 배후 상권 연계.",
-    visit:"파주 임진각 평화누리 → 도라전망대·제3땅굴 → 캠프그리브스",
-    vol:"임진각 일원 관광지 환경정비·관광안내 지원",
-    caution:"눈으로 보이는 현장이라 인터뷰와 사진이 가장 잘 나옵니다. 군사상황에 따라 당일 통제될 수 있어 대체 일정이 필요합니다." },
-
-  { id:"p3", code:"후보 3", rec:"",
-    title:"320억이 쌓여 있는데 한 건도 못 쓴다 — 남북교류협력기금의 집행 구조",
-    pq:"경기도 남북교류협력기금은 2025년 본예산 320억 원 규모입니다. 그런데 최근 5년간 정수시설·양묘장·스마트온실 같은 직접 지원형 사업은 단 한 건도 집행되지 않았습니다.",
-    kw:["기금 운용","집행률","조건부 설계","중앙–지방 협의"],
-    evid:"경기도의회 지적 — “북한이 문을 열지 않으면 한 푼도 집행할 수 없는 구조”. 현재는 평화통일교육·인식개선 등 간접사업만 추진. 통일부–경기도 대면 협의채널이 4년 만에 열렸다는 지적도 있음.",
-    plan:"기금 용도를 북한 호응이 필요 없는 영역(접경지역 주민 지원, DMZ 생태조사, 통일교육, 북한이탈주민)으로 재설계. 조건부·단계별 집행 구조. 중앙–지방 상시 협의체.",
-    visit:"경기도청 평화협력 담당부서 (거리 실측 필요)",
-    vol:"방문지 인근 복지시설 봉사",
-    caution:"돈이 없어서가 아니라 쓸 설계가 없어서 못 쓰는 문제라, 예산·기금이라는 익숙한 행정 영역으로 다룰 수 있습니다. 현장 그림은 약합니다." },
-
-  { id:"p4", code:"후보 4", rec:"",
-    title:"1,047명에서 223명으로 — 입국 급감 시대의 북한이탈주민 정착지원",
-    pq:"북한이탈주민 입국자는 2019년 1,047명에서 2025년 223명으로 줄었습니다. 그런데 정착지원 체계는 여전히 ‘새로 들어오는 사람’을 전제로 설계돼 있습니다.",
-    kw:["정착지원","하나원 통합","여성 비중 89%","정착 장기화"],
-    evid:"2025년 입국 223명(여성 198·남성 25), 누적 34,537명. 하나원 본원(안성) 입소 50~60명대, 화천 분소 10명 미만으로 통일부가 본원·분소 통합 추진. 고용률 60.5%로 일반국민(63.5%)에 근접했으나 실업률은 4.5%로 일반국민(2.7%)의 1.7배. (2023년 조사 기준, 최신 조사 확인 필요)",
-    plan:"신규 입국자 중심에서 정착 장기화 대응으로 전환, 여성 편중에 맞춘 돌봄·경력 설계, 하나원 통합 후 유휴시설 활용.",
-    visit:"하나원(경기 안성) — 편도 약 50분으로 가장 가까움",
-    vol:"안성 지역 복지시설 봉사",
-    caution:"하나원은 신원보호 시설이라 단체 견학 가능 여부를 통일부에 먼저 확인해야 합니다. 불가 시 남북하나재단·지역 하나센터가 대안입니다." },
-
-  { id:"p5", code:"후보 5", rec:"난이도",
-    title:"10년째 남은 813억 — 개성공단 입주기업 피해 보전",
-    pq:"재가동은 유엔 제재로 우리가 결정할 수 없지만, 피해 보상은 온전히 우리 문제입니다. 그런데 10년이 지나도록 매듭지어지지 않았습니다.",
-    kw:["피해 산정 기준","경협보험금","특별법 제정","국내 보상"],
-    evid:"중단 당시 입주기업 123개사, 2026년 2월 기준 32%가 휴·폐업. 기업협회 추산 피해 1조 5,000억 vs 정부 인정 7,860억 vs 실제 지원 5,787억 → 미지원 813억 원(유동자산 217억 + 투자자산 596억).",
-    plan:"피해 산정 기준의 재설계, 개성공단지원재단 복원 시 역할 재정의.",
-    visit:"개성공단기업협회(서울) · 통일부",
-    vol:"방문지 인근 봉사",
-    caution:"보상 범위·산정이 법리 다툼 영역이고 특별법 요구가 10년째 반복되는 데는 구조적 이유가 있습니다. 보상 전체가 아니라 산정 기준 하나로 좁혀야 6쪽에 담깁니다. 접경지역 현장감은 약합니다." }
-];
 
 /* ═══════════ 7분임 명단 ═══════════ */
 var MEMBERS = [
@@ -804,19 +835,7 @@ var MEMBERS = [
 ];
 
 /* ═══════════ 공통 ═══════════ */
-var API = (CONFIG.API_URL || "").trim();
-var HAS_API = /^https:\/\//.test(API);
-var LS = { me:"t7.me", local:"t7.local" };
-var me = load(LS.me) || null;
-var rows = [], filter = "all", isAdmin = false, timer = null, busy = false;
-// 첫 조회가 끝나기 전에는 0이 아니라 "불러오는 중"을 보여줍니다.
-var loaded = !/^https:\/\//.test((CONFIG.API_URL || "").trim());
 var DOW = ["일","월","화","수","목","금","토"];
-
-try{
-  var q = new URLSearchParams(location.search);
-  if (q.get("admin") && q.get("admin") === CONFIG.ADMIN_CODE) isAdmin = true;
-}catch(e){}
 
 function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
 function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -1058,328 +1077,74 @@ document.getElementById("copy-all").addEventListener("click", function(){
   copyText(txt, "전체 일정을 복사했습니다.");
 });
 
-/* ═══════════ 역할 보드 ═══════════ */
-function setLive(state, text){
-  var d = document.getElementById("dot");
-  d.className = "dot-live" + (state === "ok" ? "" : state === "err" ? " err" : " off");
-  document.getElementById("livetxt").textContent = text;
-}
-function hhmm(){ var d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+/* ═══════════ 확정 분장 (9.17) ═══════════ */
+var ORG = {
+  "109":"농림축산식품부","110":"국민권익위원회","111":"통일부","112":"법무부","113":"국방부",
+  "114":"문화체육관광부","115":"성평등가족부","116":"농촌진흥청","117":"지식재산처","118":"문화체육관광부",
+  "119":"민주평화통일자문회의사무처","120":"국가데이터처","121":"법무부","122":"국방부","123":"문화체육관광부",
+  "124":"농촌진흥청","125":"질병관리청","126":"국가보훈부"
+};
+var OFFICE = { "112":"분임장", "121":"연구장", "120":"총무", "124":"AI담당" };
+var NAMEOF = {};
+MEMBERS.forEach(function(m){ NAMEOF[m.gb] = m.name; });
 
-function wait(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
-function fetchRows(){
-  return fetch(API + "?t=" + Date.now(), { method:"GET", cache:"no-store" })
-    .then(function(r){ return r.json(); });
-}
-// 구글 쪽에서 가끔 한 번씩 응답이 튑니다. 한 번 실패했다고 바로 끊김으로 보이지 않게 재시도합니다.
-function pull(){
-  if (!HAS_API){ rows = load(LS.local) || []; renderAll(); return Promise.resolve(); }
-  var apply = function(j){ rows = (j && j.rows) || []; loaded = true; setLive("ok", "실시간 " + hhmm()); renderAll(); };
-  return fetchRows().then(apply).catch(function(){
-    setLive("off", "재연결 중");
-    return wait(1500).then(fetchRows).then(apply).catch(function(){
-      return wait(3000).then(fetchRows).then(apply).catch(function(){
-        setLive("err", "연결 끊김 · 자동 재시도 중");
-      });
-    });
+var ASSIGN = [
+  { id:"r01", who:["115", "114", "116"] },
+  { id:"r02", who:["119", "112", "109"] },
+  { id:"r03", who:["109", "115"] },
+  { id:"r04", who:["122", "109"] },
+  { id:"r05", who:["114", "121"] },
+  { id:"r06", who:["110", "121", "119"] },
+  { id:"r07", who:["113", "117", "123"] },
+  { id:"r08", who:["110", "116", "122"] },
+  { id:"r09", who:["111", "126", "125"] },
+  { id:"r10", who:["124"] },
+  { id:"r11", who:["126", "113", "117"] },
+  { id:"r12", who:["118", "111"] },
+  { id:"r13", who:["112", "125"] },
+  { id:"r14", who:["112", "120"] },
+  { id:"r15", who:["112", "123"] }
+];
+
+function renderDuty(){
+  var html = "", curTeam = null;
+  ASSIGN.forEach(function(a){
+    var role = ROLES.filter(function(r){ return r.id === a.id; })[0];
+    if (!role) return;
+    html += '<article class="drole">' +
+      '<div class="drole-h"><span class="no">' + esc(role.no) + '</span><b>' + esc(role.title) +
+      '</b><span class="team">' + esc(role.team) + "</span></div>" +
+      a.who.map(function(gb, i){
+        var off = OFFICE[gb] ? " [" + OFFICE[gb] + "]" : "";
+        return '<div class="dp' + (i === 0 ? " main" : "") + '">' +
+          '<span class="pn">' + esc(gb) + "</span>" +
+          '<span><span class="nm">' + esc(NAMEOF[gb] || gb) + esc(off) + "</span>  " +
+          '<span class="og">' + esc(ORG[gb] || "") + "</span></span></div>";
+      }).join("") +
+      "</article>";
   });
+  document.getElementById("dutyList").innerHTML = html;
 }
-function push(action, payload){
-  if (!HAS_API){ applyLocal(action, payload); save(LS.local, rows); renderAll(); return Promise.resolve(); }
-  if (busy) return Promise.resolve();
-  busy = true;
-  var body = JSON.stringify({ action:action, payload:payload });
-  var send = function(){
-    return fetch(API, { method:"POST", body: body }).then(function(r){ return r.json(); });
-  };
-  return send()
-    .catch(function(){ return wait(1500).then(send); })
-    .then(function(j){
-      busy = false;
-      if (j && j.rows){ rows = j.rows; loaded = true; setLive("ok","실시간 " + hhmm()); renderAll(); }
-      else return pull();
-    })
-    .catch(function(){ busy = false; setLive("err","저장 실패"); toast("저장에 실패했습니다. 다시 한 번 눌러 주세요."); });
-}
-function applyLocal(action, p){
-  if (action === "add") rows.push({ id: uid(), roleId:p.roleId, name:p.name, gb:p.gb, status:"want" });
-  else if (action === "remove") rows = rows.filter(function(r){ return r.id !== p.id; });
-  else if (action === "confirm") rows.forEach(function(r){ if (r.id === p.id) r.status = "conf"; });
-  else if (action === "unconfirm") rows.forEach(function(r){ if (r.id === p.id) r.status = "want"; });
-}
-/* 같은 시트를 함께 쓰므로 roleId 앞머리로 구분합니다.
-   "vote:..." 는 주제 투표, "final:..." 은 확정 주제, 나머지는 역할 신청입니다. */
-// 이전 54/84/107 투표 기록은 보존하되 새 집계에서는 제외합니다.
-function isVote(r){ var k = String(r.roleId); return k.indexOf("vote:") === 0 || k.indexOf("vote2:") === 0; }
-function isCurVote(r){ return String(r.roleId).indexOf("vote2:") === 0; }
-function isFinal(r){ var k = String(r.roleId); return k.indexOf("final:") === 0 || k.indexOf("final2:") === 0; }
-function roleRows(){ return rows.filter(function(r){ return !isVote(r) && !isFinal(r); }); }
-function voteRows(){ return rows.filter(isCurVote); }
-function finalRow(){ return rows.filter(function(r){ return String(r.roleId).indexOf("final2:") === 0; })[0] || null; }
-function finalTopicId(){ var f = finalRow(); return f ? String(f.roleId).slice(7) : null; }
-
-function byRole(id){ return roleRows().filter(function(r){ return r.roleId === id; }); }
-// 교번은 앞자리 0 유무가 갈릴 수 있어 정규화해서 비교합니다.
-function normGb(v){ return String(v == null ? "" : v).trim().replace(/^0+(?=.)/, ""); }
-function isMine(r){ return me && r.name === me.name && normGb(r.gb) === normGb(me.gb); }
-
-function renderBoard(){
-  var conf = 0, want = 0, none = 0;
-  ROLES.forEach(function(role){
-    var list = byRole(role.id);
-    if (list.some(function(r){ return r.status === "conf"; })) conf++;
-    else if (list.length) want++;
-    else none++;
-  });
-  document.getElementById("s-conf").textContent = loaded ? conf : "·";
-  document.getElementById("s-want").textContent = loaded ? want : "·";
-  document.getElementById("s-none").textContent = loaded ? none : "·";
-  document.getElementById("bar-f").style.width = (conf / ROLES.length * 100) + "%";
-  document.getElementById("bar-p").style.width = (want / ROLES.length * 100) + "%";
-
-  var mewho = document.getElementById("mewho"), mine = document.getElementById("mine");
-  if (me){
-    mewho.innerHTML = "<b>" + esc(me.name) + "</b> · 교번 " + esc(me.gb);
-    var my = rows.filter(isMine);
-    mine.innerHTML = my.length ? my.map(function(r){
-      var role = ROLES.filter(function(x){ return x.id === r.roleId; })[0];
-      return '<span class="minechip">' + (role ? esc(role.no + " " + role.title) : esc(r.roleId)) +
-             (r.status === "conf" ? " ✓" : "") + "</span>";
-    }).join("") : '<span class="minechip none">아직 신청한 역할이 없습니다</span>';
-  } else {
-    mewho.textContent = "화면 아래에서 본인 이름을 고르면 신청할 수 있습니다.";
-    mine.innerHTML = "";
-  }
-
-  // 아직 아무 역할도 신청하지 않은 분임원
-  var applied = {};
-  roleRows().forEach(function(r){ applied[normGb(r.gb)] = 1; });
-  var notYet = MEMBERS.filter(function(m){ return !applied[normGb(m.gb)]; });
-  if (!loaded){
-    document.getElementById("pendingWho").textContent = "불러오는 중…";
-    document.getElementById("pendingList").innerHTML = "";
-  } else {
-    document.getElementById("pendingWho").textContent =
-      notYet.length ? MEMBERS.length - notYet.length + " / " + MEMBERS.length + "명 신청 완료"
-                    : "18명 전원이 신청했습니다.";
-    document.getElementById("pendingList").innerHTML = notYet.length
-      ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
-      : '<span class="done">모두 완료 ✓</span>';
-  }
-
-  var html = "";
-  TEAMS.forEach(function(team){
-    var list = ROLES.filter(function(r){ return r.team === team; }).filter(passFilter);
-    if (!list.length) return;
-    var teamAll = ROLES.filter(function(r){ return r.team === team; });
-    var teamConf = teamAll.filter(function(r){ return byRole(r.id).some(function(x){ return x.status === "conf"; }); }).length;
-    html += '<section class="team"><div class="team-h"><h2>' + esc(team) + "</h2><span>" +
-            teamConf + " / " + teamAll.length + " 확정</span></div>";
-    list.forEach(function(role){ html += roleCard(role); });
-    html += "</section>";
-  });
-  document.getElementById("board").innerHTML = html ||
-    '<section class="team"><p style="color:var(--muted);font-size:13.5px">조건에 맞는 역할이 없습니다.</p></section>';
-}
-function passFilter(role){
-  if (filter === "all") return true;
-  var list = byRole(role.id);
-  if (filter === "open") return list.length === 0;
-  if (filter === "mine") return list.some(isMine);
-  return true;
-}
-function roleCard(role){
-  var list = byRole(role.id);
-  var hasConf = list.some(function(r){ return r.status === "conf"; });
-  var cls = hasConf ? "filled" : (list.length ? "pending" : "empty");
-  var mineHere = list.filter(isMine)[0];
-  var people = !loaded ? '<span style="font-size:12.5px;color:var(--muted)">불러오는 중…</span>'
-    : list.length ? list.map(function(r){
-    var can = isAdmin || isMine(r);
-    return '<span class="person ' + (r.status === "conf" ? "conf" : "want") + '">' + esc(r.name) +
-           (r.status === "conf" ? " ✓" : "") +
-           (can ? '<span class="x" data-act="remove" data-id="' + esc(r.id) + '" title="취소">×</span>' : "") + "</span>";
-  }).join("") : '<span class="nobody">아직 아무도 없습니다</span>';
-
-  var acts = mineHere
-    ? '<button class="btn warn" data-act="remove" data-id="' + esc(mineHere.id) + '">신청 취소</button>'
-    : '<button class="btn pri" data-act="add" data-role="' + esc(role.id) + '"' + (me ? "" : " disabled") + '>이 역할 신청</button>';
-  if (isAdmin && list.length){
-    list.forEach(function(r){
-      acts += '<button class="btn" data-act="' + (r.status === "conf" ? "unconfirm" : "confirm") + '" data-id="' + esc(r.id) + '">' +
-              esc(r.name) + (r.status === "conf" ? " 확정해제" : " 확정") + "</button>";
-    });
-  }
-  return '<article class="rolecard ' + cls + '">' +
-    '<div class="rc-top"><span class="rc-no">' + esc(role.no) + '</span><span class="rc-due">~' + esc(role.due) + "</span></div>" +
-    "<h3>" + esc(role.title) + '</h3><p class="d">' + esc(role.d) + "</p>" +
-    '<div class="people">' + people + '</div><div class="acts">' + acts + "</div></article>";
-}
-
-document.getElementById("board").addEventListener("click", function(e){
-  var b = e.target.closest("[data-act]");
-  if (!b) return;
-  var act = b.getAttribute("data-act");
-  if (act === "add"){
-    if (!me){ toast("먼저 아래에 이름과 교번을 입력해 주세요."); return; }
-    push("add", { roleId: b.getAttribute("data-role"), name: me.name, gb: me.gb });
-    toast("신청했습니다.");
-  } else if (act === "remove"){ push("remove", { id: b.getAttribute("data-id") }); }
-  else { push(act, { id: b.getAttribute("data-id") }); }
-});
-Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(c){
-  c.addEventListener("click", function(){
-    Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(x){
-      x.setAttribute("aria-pressed", String(x === c));
-    });
-    filter = c.getAttribute("data-f");
-    renderBoard();
-  });
-});
-var memberSel = document.getElementById("in-member");
-memberSel.innerHTML = '<option value="">이름을 골라 주세요</option>' +
-  MEMBERS.map(function(m){ return '<option value="' + m.gb + '">' + esc(m.gb + " " + m.name) + "</option>"; }).join("");
-memberSel.addEventListener("change", function(){
-  var g = memberSel.value;
-  if (!g){ me = null; save(LS.me, null); renderAll(); return; }
-  var m = MEMBERS.filter(function(x){ return x.gb === g; })[0];
-  me = { name:m.name, gb:m.gb };
-  save(LS.me, me);
-  toast(m.name + "님으로 설정했습니다.");
-  renderAll();
-});
-document.getElementById("btn-refresh").addEventListener("click", function(){ pull(); });
-
-function renderAll(){ renderBoard(); renderTopics(); }
 
 /* ═══════════ 주제 투표 ═══════════ */
-function votesFor(tid){ return voteRows().filter(function(r){ return String(r.roleId).slice(6) === tid; }); }
-function myVote(){ return voteRows().filter(isMine)[0] || null; }
 
-function castVote(tid){
-  if (!me){ toast("먼저 화면 아래에서 본인 이름을 골라 주세요."); return; }
-  var prev = myVote();
-  var add = function(){ return push("add", { roleId:"vote2:" + tid, name:me.name, gb:me.gb }); };
-  if (prev){
-    if (String(prev.roleId).slice(6) === tid){ toast("이미 이 주제를 고르셨습니다."); return; }
-    push("remove", { id: prev.id }).then(add);
-  } else add();
-  toast("선택했습니다. 언제든 바꿀 수 있습니다.");
-}
-function setFinal(tid){
-  var f = finalRow();
-  var add = function(){ return push("add", { roleId:"final2:" + tid, name:"확정", gb:"-" }); };
-  if (f){
-    if (String(f.roleId).slice(7) === tid){ push("remove", { id:f.id }); toast("확정을 해제했습니다."); return; }
-    push("remove", { id:f.id }).then(add);
-  } else add();
-  toast("이 주제로 확정했습니다.");
-}
-
-function renderTopics(){
-  var fin = finalTopicId();
-  var box = document.getElementById("finalbox");
-  if (fin){
-    var t = TOPICS.filter(function(x){ return x.id === fin; })[0];
-    box.hidden = false;
-    box.innerHTML = '<div class="l">확정된 연구주제</div><h3>' + esc(t ? t.code + " · " + t.title : fin) + "</h3>";
-  } else box.hidden = true;
-
-  var voted = {}, total = 0;
-  voteRows().forEach(function(r){ voted[normGb(r.gb)] = 1; total++; });
-  var notYet = MEMBERS.filter(function(m){ return !voted[normGb(m.gb)]; });
-  if (!loaded){
-    document.getElementById("voteWho").textContent = "불러오는 중…";
-    document.getElementById("voteePending").innerHTML = "";
-  } else {
-    document.getElementById("voteWho").textContent =
-      (MEMBERS.length - notYet.length) + " / " + MEMBERS.length + "명 투표 완료" +
-      (notYet.length ? " · 아직 안 한 사람" : "");
-    document.getElementById("voteePending").innerHTML = notYet.length
-      ? notYet.map(function(m){ return "<span>" + esc(m.name) + "</span>"; }).join("")
-      : '<span class="done">전원 투표 완료 ✓</span>';
-  }
-
-  var max = 0;
-  TOPICS.forEach(function(t){ max = Math.max(max, votesFor(t.id).length); });
-
-  document.getElementById("topicList").innerHTML = TOPICS.map(function(t){
-    var vs = votesFor(t.id);
-    var mineHere = vs.filter(isMine).length > 0;
-    var isFin = (fin === t.id);
-    var pct = MEMBERS.length ? Math.round(vs.length / MEMBERS.length * 100) : 0;
-    return '<article class="topic' + (isFin ? " won" : mineHere ? " mine" : "") + '">' +
-      '<div class="topic-top"><span class="topic-code">' + esc(t.code) + "</span>" +
-      (t.rec ? '<span class="recbadge' + (t.rec === "난이도" ? " hard" : "") + '">' + esc(t.rec) + "</span>" : "") +
-      '<span class="votecount' + (vs.length && vs.length === max ? " hot" : "") + '">' + (loaded ? vs.length + "표" : "…") + "</span></div>" +
-      "<h3>" + esc(t.title) + "</h3>" +
-      '<p class="pq">' + esc(t.pq) + "</p>" +
-      '<div class="kw">' + t.kw.map(function(k){ return "<span>" + esc(k) + "</span>"; }).join("") + "</div>" +
-      '<div class="tline"><b>핵심 근거</b><span>' + esc(t.evid) + "</span></div>" +
-      '<div class="tline pro"><b>대안 방향</b><span>' + esc(t.plan) + "</span></div>" +
-      '<div class="tline"><b>현장</b><span>' + esc(t.visit) + "</span></div>" +
-      '<div class="tline"><b>연계 봉사</b><span>' + esc(t.vol) + "</span></div>" +
-      '<div class="tline con"><b>유의할 점</b><span>' + esc(t.caution) + "</span></div>" +
-      '<div class="votebar"><i style="width:' + pct + '%"></i></div>' +
-      '<div class="voters">' + vs.map(function(r){ return "<span>" + esc(r.name) + "</span>"; }).join("") + "</div>" +
-      '<div class="ev-acts">' +
-        '<button class="btn ' + (mineHere ? "" : "pri") + '" data-vote="' + t.id + '"' + (me && loaded ? "" : " disabled") + '>' +
-          (!loaded ? "불러오는 중…" : mineHere ? "내 선택 ✓" : "이 주제 선택") + "</button>" +
-        (isAdmin ? '<button class="btn ' + (isFin ? "warn" : "") + '" data-final="' + t.id + '">' +
-          (isFin ? "확정 해제" : "이 주제로 확정") + "</button>" : "") +
-      "</div></article>";
-  }).join("");
-}
-
-document.getElementById("topicList").addEventListener("click", function(e){
-  var b = e.target.closest("[data-vote],[data-final]");
-  if (!b) return;
-  if (b.dataset.vote) castVote(b.dataset.vote);
-  else setFinal(b.dataset.final);
-});
 
 /* ═══════════ 뷰 전환 ═══════════ */
-var VIEWS = ["topic", "cal", "role"];
-function needsData(v){ return v === "topic" || v === "role"; }
-function currentView(){
-  for (var i = 0; i < VIEWS.length; i++)
-    if (!document.getElementById("view-" + VIEWS[i]).hidden) return VIEWS[i];
-  return "topic";
-}
+var VIEWS = ["topic", "duty", "cal"];
 function showView(which){
   if (VIEWS.indexOf(which) < 0) which = "topic";
   VIEWS.forEach(function(v){
     document.getElementById("vt-" + v).setAttribute("aria-selected", String(v === which));
     document.getElementById("view-" + v).hidden = (v !== which);
   });
-  var live = needsData(which);
-  document.getElementById("idbar").hidden = !live;
-  document.getElementById("livewrap").hidden = !live;
-  document.body.classList.toggle("role-mode", live);
   try{ localStorage.setItem("t7.view", which); }catch(e){}
-  if (live) pull();
   window.scrollTo(0, 0);
 }
 VIEWS.forEach(function(v){
   document.getElementById("vt-" + v).addEventListener("click", function(){ showView(v); });
 });
 
-document.addEventListener("visibilitychange", function(){
-  if (document.visibilityState === "visible" && needsData(currentView())) pull();
-});
-
 /* ═══════════ 시작 ═══════════ */
-if (me && me.gb) memberSel.value = String(me.gb);
-if (isAdmin){
-  document.getElementById("adminnote").hidden = false;
-  document.getElementById("subline").textContent = "제191기 · 관리자 모드";
-}
-if (!HAS_API){
-  var b = document.getElementById("banner");
-  b.hidden = false;
-  b.innerHTML = "<b>역할 보드가 아직 혼자 보기 모드입니다.</b> 지금은 신청 내용이 내 휴대폰에만 저장되고 다른 조원에게는 보이지 않습니다. " +
-                "index.html 맨 위 API_URL에 Apps Script 주소를 넣으면 실시간 공유로 바뀝니다. (일정 캘린더는 지금도 정상 동작합니다.)";
-}
 
 // 오늘 또는 다음 일정 날짜를 기본 선택
 (function initSelection(){
@@ -1395,20 +1160,11 @@ if (!HAS_API){
 renderNextUp();
 renderMonth();
 renderDay();
-renderBoard();
-renderTopics();
+renderDuty();
 
 var saved = null;
 try{ saved = localStorage.getItem("t7.view"); }catch(e){}
 showView(saved || "topic");
-if (HAS_API){
-  setLive("off", "연결 중");
-  timer = setInterval(function(){
-    if (document.visibilityState === "visible" && !document.getElementById("view-role").hidden) pull();
-  }, Math.max(3, CONFIG.POLL_SECONDS) * 1000);
-} else {
-  setLive("off", "혼자 보기");
-}
 })();
 </script>
 </body>
