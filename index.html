@@ -329,6 +329,61 @@ a.btn{display:inline-block; text-decoration:none; text-align:center}
 .votebar i{display:block; height:100%; background:var(--accent)}
 .voters{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:11px; min-height:4px}
 .voters span{font-size:12px; background:var(--accent-soft); color:var(--accent); border-radius:99px; padding:3px 9px; font-weight:600}
+/* ───── 정책 탭 ───── */
+.upd{margin:8px 0 2px; font-size:11.5px; color:var(--muted); font-family:"IBM Plex Mono",monospace}
+.upd b{color:var(--ink-2); font-weight:600}
+.todo.hot{border-left:3px solid var(--urgent)}
+.todo.hot .n{color:var(--urgent)}
+.todo ul.chk{margin:6px 0 0; padding-left:0; list-style:none}
+.todo ul.chk li{position:relative; padding-left:16px; font-size:12.6px; color:var(--ink-2); line-height:1.55; margin-bottom:3px}
+.todo ul.chk li::before{content:"☐"; position:absolute; left:0; top:0; color:var(--urgent); font-size:12px}
+.todo code, .dcard code{font-size:11.5px; background:var(--surface-2); padding:1px 4px; border-radius:2px; word-break:break-all}
+.pmap{background:var(--surface); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow);
+  margin-bottom:12px; overflow:hidden}
+.pmap .ph{display:grid; grid-template-columns:1fr 18px 1fr; gap:6px; padding:7px 11px;
+  background:var(--surface-2); border-bottom:1px solid var(--rule-soft);
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.06em; color:var(--muted)}
+.pmap .ph span:last-child{color:var(--ok)}
+.pmap .ph span:first-child{color:var(--urgent)}
+.pmap .pr{display:grid; grid-template-columns:1fr 18px 1fr; gap:6px; padding:9px 11px;
+  border-bottom:1px solid var(--rule-soft); font-size:12.8px; line-height:1.5; color:var(--ink-2); align-items:center}
+.pmap .pr:last-child{border-bottom:none}
+.pmap .pr i{font-style:normal; color:var(--muted); text-align:center}
+.pmap .pr b{color:var(--ink)}
+.sched{background:var(--surface); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow);
+  padding:4px 12px 8px; margin-bottom:12px}
+.sched .sd{margin:10px 0 4px; font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:12.5px;
+  color:var(--accent); border-bottom:1px solid var(--rule-soft); padding-bottom:4px}
+.sched .sd em{font-style:normal; color:var(--muted); font-weight:400; margin-left:3px}
+.sched .sr{display:grid; grid-template-columns:52px 1fr; gap:8px; padding:4px 0}
+.sched .sr span{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2); font-variant-numeric:tabular-nums; padding-top:1px}
+.sched .sr p{margin:0; font-size:12.9px; color:var(--ink-2); line-height:1.5}
+.sched .sr p b{color:var(--ink)}
+.sched .sr.alt span{color:var(--urgent)}
+.verg{margin:12px 0 5px; font-size:12px; font-weight:700; color:var(--ink)}
+ol.ver{list-style:none; margin:0 0 4px; padding:0 0 0 12px; border-left:2px solid var(--rule)}
+ol.ver li{position:relative; padding:0 0 9px 12px}
+ol.ver li::before{content:""; position:absolute; left:-17px; top:5px; width:8px; height:8px;
+  border-radius:50%; background:var(--surface); border:2px solid var(--rule)}
+ol.ver li.now::before{background:var(--accent); border-color:var(--accent)}
+ol.ver .vt{font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600; color:var(--ink); margin-right:6px}
+ol.ver li.now .vt{color:var(--accent)}
+ol.ver .vw{font-size:11px; color:var(--muted)}
+ol.ver p{margin:2px 0 0; font-size:12.6px; color:var(--ink-2); line-height:1.5}
+ol.ver p b{color:var(--ink)}
+.pastwrap{margin-top:26px; padding-top:12px; border-top:2px dashed var(--rule)}
+.pasthead{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--muted); margin-bottom:8px}
+details.past{background:var(--surface-2); border:1px solid var(--rule); border-radius:3px; margin-bottom:8px}
+details.past > summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:11px 12px}
+details.past > summary::-webkit-details-marker{display:none}
+details.past .pi{display:inline-flex; width:22px; height:22px; align-items:center; justify-content:center;
+  border-radius:50%; background:var(--surface); border:1px solid var(--rule); font-size:12px; color:var(--muted)}
+details.past .pt{font-size:13.5px; font-weight:600; color:var(--ink-2)}
+details.past .pd{margin-left:auto; font-size:11px; color:var(--muted)}
+details.past[open] > summary{border-bottom:1px solid var(--rule)}
+details.past[open] .pi{background:var(--accent-soft); color:var(--accent); border-color:var(--accent)}
+details.past .pastbody{padding:0 12px 12px; opacity:.92}
+
 /* ───── AI 활용 ───── */
 .acct{background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--gold);
   border-radius:3px; box-shadow:var(--shadow); padding:12px 13px; margin-bottom:12px}
@@ -414,7 +469,7 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
       </div>
     </div>
     <div class="vtabs" role="tablist">
-      <button class="vtab" role="tab" id="vt-topic" aria-selected="true" aria-controls="view-topic">주제</button>
+      <button class="vtab" role="tab" id="vt-topic" aria-selected="true" aria-controls="view-topic">정책</button>
       <button class="vtab" role="tab" id="vt-duty" aria-selected="false" aria-controls="view-duty">분장</button>
       <button class="vtab" role="tab" id="vt-ai" aria-selected="false" aria-controls="view-ai">AI</button>
       <button class="vtab" role="tab" id="vt-cal" aria-selected="false" aria-controls="view-cal">일정</button>
@@ -422,68 +477,218 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
   </div>
 </header>
 
-<!-- ══════════ 주제 ══════════ -->
+<!-- ══════════ 정책 ══════════ -->
 <div class="wrap" id="view-topic" role="tabpanel" aria-labelledby="vt-topic">
   <div class="fixedtopic">
-    <div class="l">분임 정책연구 제목 · 확정 (9.17)</div>
-    <h2>세계인이 찾는 DMZ 평화관광정책 개선방안</h2>
-    <p>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」(통일부) · 9.17 분임장 확정</p>
+    <div class="l">분임 정책연구 제목 · 9.21 기준</div>
+    <h2>세계인이 쉽게 찾는 DMZ 평화관광정책 개선방안</h2>
+    <p>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」(통일부) · 9.20 취합본부터 ‘쉽게’ 추가</p>
+  </div>
+  <div class="upd">단체방 대화 <b>9.18(금) ~ 9.21(월) 18:47</b> 기준 · 첨부파일 23개 확인</div>
+
+  <!-- ─── 이제 해야 할 일 ─── -->
+  <div class="sec-head"><h2>이제 해야 할 일</h2><span>마감 순</span></div>
+
+  <div class="todo hot"><span class="n">1</span><div><b>정책연구계획서 제출 · 9.22(화) 09:00</b>
+    <p>ver5 기준, 연구장이 9.21(월) 자정 전 제출 예정. 올리기 전 세 가지만 확인하세요.</p>
+    <ul class="chk">
+      <li>파일명에서 <b>‘ver5’를 빼고</b> 양식대로: <code>(7분임 정책연구계획서) 세계인이 쉽게 찾는 DMZ 평화관광정책 개선방안_260922</code></li>
+      <li>확장자 <b>.hwp로 저장</b> — 공지 양식 예시가 .hwp이고, 보고서 제출은 hwpx 업로드 불가로 안내돼 있습니다. 현재 ver5는 .hwpx</li>
+      <li>본문 6쪽(표지·목차 제외) — 9.21 오후 5쪽 상태라는 의견이 있었음</li>
+    </ul>
+    <span class="by">구현지</span></div></div>
+
+  <div class="todo"><span class="n">2</span><div><b>정책기획 실습과제 · 9.22(화) 17:00</b>
+    <p>개인 과제. AI 활용 금지, 표지 1 + 본문 3쪽, hwp만. 오전 개인정책기획사례 학습 후 오후 제출.</p>
+    <span class="by">개인</span></div></div>
+
+  <div class="todo"><span class="n">3</span><div><b>숙박 안 하실 분 회신 · 9.28(월)까지</b>
+    <p>10.7 숙소는 <b>안양 범계역 주변</b>, 9.28(월) 일괄 예약(위약금 없는 곳). 숙박하지 않는 분만 분임장께 알리고, 괜찮은 숙소를 알면 추천해 주세요. 상한 1인 7만원(그 밖의 지역).</p>
+    <span class="by">전원 → 정종주·김소영</span></div></div>
+
+  <div class="todo"><span class="n">4</span><div><b>코칭 수업 · 9.28(월) 13:00~17:00</b>
+    <p>제출한 계획서에 대해 정책FT 교수 피드백. 여기서 받은 의견으로 보고서 방향을 보완합니다.</p>
+    <span class="by">전원</span></div></div>
+
+  <div class="todo"><span class="n">5</span><div><b>서면질의 기관·질의서 확정 · 9.30까지</b>
+    <p>파주시청 관광과가 <b>방문은 거절, 서면 인터뷰는 가능</b>하다고 회신. 서면질의 대상은 파주시청 관광과 · 한국관광공사 + 1곳(미정). 질의서는 10.1 현장학습계획서의 공문 목록에 넣어야 하고, 공문은 10.2부터 순차 발송 예정입니다.</p>
+    <span class="by">구현지 · 정인희(05 인터뷰) · 홍민성(13 섭외)</span></div></div>
+
+  <div class="todo"><span class="n">6</span><div><b>현장학습계획서 + 사회봉사계획서 · 10.1(목) 17:00</b>
+    <p>현재 현장학습계획서_4, 봉사계획서_1까지 작성됨. 두 서류는 <b>제출란이 서로 다릅니다.</b></p>
+    <ul class="chk">
+      <li>방문 개요표 날짜가 <b>‘10.7.(목)’</b>으로 적혀 있음 → 10.7은 <b>수요일</b></li>
+      <li>숙소명·인원(000호텔 0명), 서면질의 3번째 기관 빈칸 채우기</li>
+    </ul>
+    <span class="by">구현지 · 정종주</span></div></div>
+
+  <div class="todo"><span class="n">7</span><div><b>반별 GPT 프로젝트 폴더 만들기</b>
+    <p>분임 업무의 AI 사용은 <b>분임 공용계정</b>으로. 각 업무 (주)담당이 폴더를 만들고 그 안에서 조사합니다(예: <code>연구조사반_통계데이터</code>). 로그인 인증코드가 뜨면 장환희 님께 톡.</p>
+    <span class="by">각 (주)담당</span></div></div>
+
+  <div class="dcard warn" style="margin-top:12px">
+    <div class="dt">최종보고서 전에 꼭 바꿔야 할 것</div>
+    <p>9.18 올라온 <b>인터뷰 결과 초안</b>(평가계획 파일 뒤 참고자료1)에 있는 한국관광공사·파주시청 담당자 발언은 <b>실제 인터뷰 전에 만든 가안</b>입니다. 10.7 현장 답변과 서면 회신이 오면 <b>그 내용으로 교체</b>해야 합니다. 함께 인용된 선행연구 3편도 원문 확인이 필요합니다.</p>
   </div>
 
-  <div class="sec-head"><h2>9.17 토의에서 정리된 것</h2><span>보고서의 뼈대</span></div>
+  <!-- ─── 지금까지 정리된 것 ─── -->
+  <div class="sec-head"><h2>지금까지 정리된 것</h2><span>계획서 ver5 기준</span></div>
 
   <article class="dcard key">
-    <div class="dt">문제 구조</div>
-    <p>DMZ 관광의 문제는 <b>한반도 긴장 상황에 따라 관광 활성화가 곤란하다</b>는 것. 핵심관계자는 <b>유엔군사령부·국방부</b>, 이해관계자는 <b>접경지역 지자체와 주민, 상공인, 여행업체</b>. 먼저 “누구의 문제를 푸는가”를 정해야 방향이 선다. <em>— 홍병성</em></p>
+    <div class="dt">범위 결정</div>
+    <p>안보·생태 영역은 빼고 <b>관광 편의성</b>에 초점을 맞추기로 함(9.20 취합). 제목에 ‘쉽게’를 넣어 범위를 좁힘. 결과물은 <b>한글 보고서와 PPT 보고자료 2개</b>를 모두 작업합니다.</p>
+  </article>
+
+  <div class="pmap">
+    <div class="ph"><span>문제점</span><span></span><span>개선방안</span></div>
+    <div class="pr"><div>여행계획을 어렵게 하는 <b>지역·기관별 분절된 이용체계</b></div><i>→</i><div><b>원스톱 DMZ 패스</b> — 예약·결제·신분확인·출입을 한곳에서, 실시간 여행정보</div></div>
+    <div class="pr"><div>세계적 명소화를 위한 <b>차별화된 콘텐츠 부족</b></div><i>→</i><div><b>DMZ 통합브랜드</b> 기반 글로벌 체험콘텐츠 — 권역별 테마코스, AI 다국어 해설</div></div>
+    <div class="pr"><div>관광과 <b>지역경제 연계 부족</b> (당일방문 비중 66~99%)</div><i>→</i><div>당일 견학을 <b>지역 체류형 평화여행</b>으로 — 1박2일·2박3일 연계상품</div></div>
+  </div>
+
+  <article class="dcard">
+    <div class="dt">국외 사례</div>
+    <p><b>독일</b> 베를린 장벽 — 공공은 진정성·무료 접근성, 민간은 투어·상업서비스를 맡는 협력구조. <b>영국</b> 벨파스트 평화의 벽 — 주민이 해설자·사업자로 참여해 관광수익을 지역에 환원.</p>
   </article>
 
   <article class="dcard">
-    <div class="dt">핵심 쟁점</div>
-    <p>과거에는 DMZ 내부까지 둘레길이 조성돼 있었으나 현재는 접경선 이후로 후퇴한 상태. <b>재추진 결정권은 유엔군사령관의 권한</b>에 달려 있음. 접경지역 상공인·여행업체의 경제적 이득과 평화체제 구축을 근거로 <b>유엔사를 설득하는 방향</b>이 하나의 축이 될 수 있음. <em>— 홍병성</em></p>
+    <div class="dt">추진계획 (ver5)</div>
+    <p>3개 축: ① 범정부 추진체계·운영기준 표준화 ② 글로벌 체험콘텐츠·체류형 여행 ③ 홍보·성과관리. 추진과제 5개(협의체 → DMZ 패스 시범 → 콘텐츠·지역상생 → 해외 홍보 → 성과평가·환류), 핵심지표 4개(접근성 · 체류경제 · 평화가치 · 지속가능성).</p>
   </article>
 
-  <article class="dcard warn">
-    <div class="dt">가장 중요한 지적</div>
-    <p>정책연구보고서는 <b>특정 정책·제도·사업의 문제점을 개선하는 틀</b>이어야 하는데, 자칫 “관광 사업 활성화 방안”이 되어버릴 수 있음. 제도의 개요·예산 투입 현황·성과지표가 나오려면 <b>분석 대상 제도를 하나 특정</b>해야 함. <em>— 전상민</em></p>
-  </article>
+  <div class="sec-head"><h2>현장학습 확정안</h2><span>10.7(수) ~ 10.8(목)</span></div>
+  <div class="sched">
+    <div class="sd">10.7 <em>수</em></div>
+    <div class="sr"><span>09:00</span><p>인재원 <b>전원 출석체크 후</b> 버스 출발 (현장 직행 불가)</p></div>
+    <div class="sr"><span>11:00</span><p>통일동산 관광특구 · <b>국립파주민속박물관</b></p></div>
+    <div class="sr"><span>12:00</span><p>오찬(특구 내 식당) — 주민·소상공인 현장조사 병행</p></div>
+    <div class="sr"><span>13:00</span><p>헤이리 관광안내소 · 평화누리길</p></div>
+    <div class="sr"><span>14:00</span><p><b>오두산 통일전망대</b> — 단체관람·체험해설·인터뷰</p></div>
+    <div class="sr"><span>15:00~</span><p>안양 범계역 숙소 이동 · 자유시간</p></div>
+    <div class="sd">10.8 <em>목</em></div>
+    <div class="sr"><span>08:30</span><p>봉사기관으로 개별 이동 (범계역에서 약 1.7km)</p></div>
+    <div class="sr"><span>09:00</span><p><b>안양시노인종합복지관</b> 가을바자회 봉사 4시간</p></div>
+    <div class="sr"><span>13:00~</span><p>소감 나누기 후 해산 — <b>개별 귀가 가능</b></p></div>
+    <div class="sr alt"><span>비상</span><p>군사상황 등 변동 시 임진각 평화누리공원</p></div>
+  </div>
 
   <article class="dcard ok">
-    <div class="dt">그 해법</div>
-    <p>DMZ 평화관광에는 <b>현재 투입되는 예산이 있음</b>. 따라서 문제 해결 시 <b>관광객 수 또는 증가율로 KPI 설정이 가능</b>함. 제목에 ‘관광’을 넣어 범위를 좁힌 것도 KPI를 잡기 위해서임. <em>— 홍병성</em></p>
+    <div class="dt">운영진 답변 (9.21 자치회)</div>
+    <p>· 기관 <b>2곳 이상 방문</b> 권장 — 채점 시 방문 여부 체크, 분임 전원 함께 이동<br>
+    · 1일차는 15시 이후 종료 가능, 2일차는 종료 시각 제한 없음<br>
+    · 출석은 <b>분임원 전체 얼굴이 나온 사진</b>으로 갈음<br>
+    · 숙박은 같은 장소가 원칙. 육아 등 사유로 자택 숙박 가능(교통비는 미지급)<br>
+    · 온라인 기간 문의는 분임장 또는 교육운영 안내책자의 사무실 번호로</p>
   </article>
 
   <article class="dcard">
-    <div class="dt">서술 범위</div>
-    <p>현황 및 문제점은 <b>내국인·외국인 양 측면</b>으로 나누어 구성. 외국인만 특정하면 모수가 작고, 나누면 담을 내용이 다양해짐. <em>— 홍민성·유진아·김기현</em></p>
+    <div class="dt">역할·운영 관련 결정</div>
+    <p>· 정책발표는 <b>류지연</b> — PPT 분량은 한글 보고서를 본 뒤 조정<br>
+    · 할루시네이션 검증은 <b>최종보고서에만 반영</b>, 계획서 붙임에서는 삭제<br>
+    · 취합본은 <b>ver 번호</b>로 구분해 올리기<br>
+    · 노트북 MAC 주소 등록은 3주차에 일괄 진행(미제출·변경자는 총무께 개인톡)</p>
   </article>
 
-  <article class="dcard">
-    <div class="dt">결론의 방향</div>
-    <p>결론을 “더 많은 외국인을 유치하자”가 아니라 <b>“지역과 환경을 살리면서 어떻게 오래도록 평화의 메시지를 전할 것인가”</b>로 잡으면 훨씬 깊이 있는 개선방안이 나옴. <em>— 최낙중</em></p>
-  </article>
+  <!-- ─── 버전 기록 ─── -->
+  <div class="sec-head"><h2>파일 버전 기록</h2><span>주요 변경만</span></div>
 
-  <div class="sec-head"><h2>이제 해야 할 일</h2><span>9.22 계획서까지</span></div>
+  <div class="verg">정책연구계획서</div>
+  <ol class="ver">
+    <li><span class="vt">초안</span><span class="vw">9.18 · 전상민</span><p>최초 계획서(안). 제목 ‘세계인이 찾는’</p></li>
+    <li><span class="vt">파트별 수정</span><span class="vw">9.19~20</span><p>검토배경·현황(김기현), 통계 현행화(이종근), 문제점(황강선), 해외사례, 개선방안 검토의견 — 각자 파일로 올림</p></li>
+    <li><span class="vt">취합본①</span><span class="vw">9.20 · 전상민</span><p>파트별 수정 합침. <b>안보·생태 영역 제외, 관광 편의성 중심</b>. 제목에 ‘쉽게’ 추가</p></li>
+    <li><span class="vt">취합본②</span><span class="vw">9.20 · 정인희</span><p>3~5쪽 보완 — 개선방안을 <b>문제점과 1:1로</b> 맞춰 재구성</p></li>
+    <li><span class="vt">ver3</span><span class="vw">9.21 새벽 · 구현지</span><p>파일명 양식, 목차, 검토배경 시급성 표현, <b>국내 현황과 국외 사례 분리</b>, 업무분장 (주) 순서 조정</p></li>
+    <li><span class="vt">검토1</span><span class="vw">9.21 아침 · 정종주</span><p>취합본 2개에 메모 — 홍보계획 추가, 최종고객(엔드유저) 참여 제안</p></li>
+    <li><span class="vt">ver4</span><span class="vw">9.21 오전 · 구현지</span><p>분임장 메모 반영, 소제목 ‘선제 추진’ → ‘기회’. 이선기 할루시네이션 확인본 별도</p></li>
+    <li class="now"><span class="vt">ver5</span><span class="vw">9.21 오후 · 유진아</span><p>추진계획 전면 재구성 — 3개 축, <b>홍보 과제 신설</b>, 품질인증제·최종고객 참여, 핵심지표 4개. 할루시네이션 붙임 삭제</p></li>
+  </ol>
 
-  <div class="todo"><span class="n">1</span><div><b>분석 대상 제도 특정</b><p>예산·성과지표가 나오는 단위를 하나 고릅니다. 후보: DMZ 평화의 길(문체부·행안부 등 공동), 파주 DMZ 평화관광(지자체 운영), 접경지역 발전종합계획 관광 부문. <b>전상민 님 지적에 대한 답</b>이 여기서 나옵니다.</p><span class="by">연구조사반</span></div></div>
+  <div class="verg">정책현장학습계획서</div>
+  <ol class="ver">
+    <li><span class="vt">_1</span><span class="vw">9.21 아침 · 정종주</span><p>양식 초안. 방문지 칸 비어 있음</p></li>
+    <li><span class="vt">_2</span><span class="vw">9.21 오후 · 정종주</span><p>통일동산·오두산 확정, <b>국립파주민속박물관 추가</b>, 시간표 작성</p></li>
+    <li class="now"><span class="vt">_4</span><span class="vw">9.21 저녁 · 정종주</span><p>헤이리 관광안내소 추가, 워딩 정리, <b>서면질의 기관 목록 신설</b>(파주시청·한국관광공사·미정 1곳)</p></li>
+  </ol>
 
-  <div class="todo"><span class="n">2</span><div><b>“누구의 문제인가” 확정</b><p>유엔사·국방부(출입 통제) / 접경지역 주민·상공인(경제) / 관광객(불편) 중 무엇을 주된 고객으로 둘지 정합니다. 이 선택이 Ⅲ장 개선방안의 성격을 결정합니다.</p><span class="by">분임 전체</span></div></div>
+  <div class="verg">기타</div>
+  <ol class="ver">
+    <li><span class="vt">봉사계획서_1</span><span class="vw">9.21 · 정종주</span><p>안양시노인종합복지관, 10.8 09~13시 가을바자회 봉사, 협조공문 수신처 포함</p></li>
+    <li><span class="vt">추진계획 초안</span><span class="vw">9.19 · 유진아</span><p>1쪽 분량. ver5 추진계획의 바탕</p></li>
+    <li><span class="vt">발표자료 시안</span><span class="vw">9.21 · 류지연</span><p>계획서를 넣어 AI로 만든 5장짜리 PPT 시안</p></li>
+    <li><span class="vt">참고자료</span><span class="vw">9.19~20</span><p>강원도 DMZ관광 활성화 방안(2006), 파주시 공약 이행관리카드, 제6기 파주시 지역사회보장계획(안)</p></li>
+  </ol>
 
-  <div class="todo"><span class="n">3</span><div><b>예산·성과지표 확보</b><p>현재 투입 예산 규모와 관광객 통계를 원자료에서 뽑습니다. 관광지식정보시스템(know.tour.go.kr), 공공데이터포털의 파주시 DMZ평화관광 이용현황.</p><span class="by">01 통계·데이터</span></div></div>
+  <!-- ─── 지난 내용 ─── -->
+  <div class="pastwrap">
+    <div class="pasthead">지난 내용</div>
+    <details class="past">
+      <summary><span class="pi" aria-hidden="true">↺</span><span class="pt">9.17 토의 정리</span><span class="pd">주제 확정 · 초기 방향</span></summary>
+      <div class="pastbody">
+      <div class="fixedtopic">
+          <div class="l">분임 정책연구 제목 · 당시 (9.17)</div>
+          <h2>세계인이 찾는 DMZ 평화관광정책 개선방안</h2>
+          <p>국정과제 118 「한반도 평화경제 및 공동성장의 미래 준비」(통일부) · 9.17 분임장 확정</p>
+        </div>
 
-  <div class="todo"><span class="n">4</span><div><b>KPI 설정</b><p>관광객 수 또는 증가율을 목표 지표로 삼되, 기준연도와 산출식을 명시합니다.</p><span class="by">08 Ⅲ개선방안</span></div></div>
+        <div class="sec-head"><h2>9.17 토의에서 정리된 것</h2><span>보고서의 뼈대</span></div>
 
-  <div class="todo"><span class="n">5</span><div><b>방문지 섭외</b><p>파주 코스 유력 — 임진각 → 제3땅굴 → 도라전망대 → 도라산역 → 통일촌마을. 파주시 DMZ평화관광 사전예약, 군사상황에 따라 당일 통제될 수 있어 대체 일정 필요.</p><span class="by">13 방문지 섭외</span></div></div>
+        <article class="dcard key">
+          <div class="dt">문제 구조</div>
+          <p>DMZ 관광의 문제는 <b>한반도 긴장 상황에 따라 관광 활성화가 곤란하다</b>는 것. 핵심관계자는 <b>유엔군사령부·국방부</b>, 이해관계자는 <b>접경지역 지자체와 주민, 상공인, 여행업체</b>. 먼저 “누구의 문제를 푸는가”를 정해야 방향이 선다. <em>— 홍병성</em></p>
+        </article>
 
-  <div class="todo"><span class="n">6</span><div><b>봉사활동지 섭외</b><p>10.8(목) 9:30~15:00 중 4시간, 19명 수용 가능한 곳. 파주권에서 찾으면 동선이 맞습니다.</p><span class="by">15 봉사 섭외</span></div></div>
+        <article class="dcard">
+          <div class="dt">핵심 쟁점</div>
+          <p>과거에는 DMZ 내부까지 둘레길이 조성돼 있었으나 현재는 접경선 이후로 후퇴한 상태. <b>재추진 결정권은 유엔군사령관의 권한</b>에 달려 있음. 접경지역 상공인·여행업체의 경제적 이득과 평화체제 구축을 근거로 <b>유엔사를 설득하는 방향</b>이 하나의 축이 될 수 있음. <em>— 홍병성</em></p>
+        </article>
 
-  <div class="dcard warn" style="margin-top:14px">
-    <div class="dt">아직 확인 안 된 것</div>
-    <p>분임 정책연구보고서는 한글(hwp)로 내는데, <b>발표자료를 PPT로 따로 만들어야 하는지</b>가 아직 확인되지 않았습니다(류지연 님 질문). 분임장이 확인 중입니다.<br>
-    참고로 분임장 전언에 따르면 <b>마지막 주 발표는 PPT로 안 해도 되지만, PPT로 하면 일정 부분 가점</b>이 있다고 합니다.</p>
+        <article class="dcard warn">
+          <div class="dt">가장 중요한 지적</div>
+          <p>정책연구보고서는 <b>특정 정책·제도·사업의 문제점을 개선하는 틀</b>이어야 하는데, 자칫 “관광 사업 활성화 방안”이 되어버릴 수 있음. 제도의 개요·예산 투입 현황·성과지표가 나오려면 <b>분석 대상 제도를 하나 특정</b>해야 함. <em>— 전상민</em></p>
+        </article>
+
+        <article class="dcard ok">
+          <div class="dt">그 해법</div>
+          <p>DMZ 평화관광에는 <b>현재 투입되는 예산이 있음</b>. 따라서 문제 해결 시 <b>관광객 수 또는 증가율로 KPI 설정이 가능</b>함. 제목에 ‘관광’을 넣어 범위를 좁힌 것도 KPI를 잡기 위해서임. <em>— 홍병성</em></p>
+        </article>
+
+        <article class="dcard">
+          <div class="dt">서술 범위</div>
+          <p>현황 및 문제점은 <b>내국인·외국인 양 측면</b>으로 나누어 구성. 외국인만 특정하면 모수가 작고, 나누면 담을 내용이 다양해짐. <em>— 홍민성·유진아·김기현</em></p>
+        </article>
+
+        <article class="dcard">
+          <div class="dt">결론의 방향</div>
+          <p>결론을 “더 많은 외국인을 유치하자”가 아니라 <b>“지역과 환경을 살리면서 어떻게 오래도록 평화의 메시지를 전할 것인가”</b>로 잡으면 훨씬 깊이 있는 개선방안이 나옴. <em>— 최낙중</em></p>
+        </article>
+
+        <div class="sec-head"><h2>이제 해야 할 일</h2><span>9.22 계획서까지</span></div>
+
+        <div class="todo"><span class="n">1</span><div><b>분석 대상 제도 특정</b><p>예산·성과지표가 나오는 단위를 하나 고릅니다. 후보: DMZ 평화의 길(문체부·행안부 등 공동), 파주 DMZ 평화관광(지자체 운영), 접경지역 발전종합계획 관광 부문. <b>전상민 님 지적에 대한 답</b>이 여기서 나옵니다.</p><span class="by">연구조사반</span></div></div>
+
+        <div class="todo"><span class="n">2</span><div><b>“누구의 문제인가” 확정</b><p>유엔사·국방부(출입 통제) / 접경지역 주민·상공인(경제) / 관광객(불편) 중 무엇을 주된 고객으로 둘지 정합니다. 이 선택이 Ⅲ장 개선방안의 성격을 결정합니다.</p><span class="by">분임 전체</span></div></div>
+
+        <div class="todo"><span class="n">3</span><div><b>예산·성과지표 확보</b><p>현재 투입 예산 규모와 관광객 통계를 원자료에서 뽑습니다. 관광지식정보시스템(know.tour.go.kr), 공공데이터포털의 파주시 DMZ평화관광 이용현황.</p><span class="by">01 통계·데이터</span></div></div>
+
+        <div class="todo"><span class="n">4</span><div><b>KPI 설정</b><p>관광객 수 또는 증가율을 목표 지표로 삼되, 기준연도와 산출식을 명시합니다.</p><span class="by">08 Ⅲ개선방안</span></div></div>
+
+        <div class="todo"><span class="n">5</span><div><b>방문지 섭외</b><p>파주 코스 유력 — 임진각 → 제3땅굴 → 도라전망대 → 도라산역 → 통일촌마을. 파주시 DMZ평화관광 사전예약, 군사상황에 따라 당일 통제될 수 있어 대체 일정 필요.</p><span class="by">13 방문지 섭외</span></div></div>
+
+        <div class="todo"><span class="n">6</span><div><b>봉사활동지 섭외</b><p>10.8(목) 9:30~15:00 중 4시간, 19명 수용 가능한 곳. 파주권에서 찾으면 동선이 맞습니다.</p><span class="by">15 봉사 섭외</span></div></div>
+
+        <div class="dcard warn" style="margin-top:14px">
+          <div class="dt">아직 확인 안 된 것</div>
+          <p>분임 정책연구보고서는 한글(hwp)로 내는데, <b>발표자료를 PPT로 따로 만들어야 하는지</b>가 아직 확인되지 않았습니다(류지연 님 질문). 분임장이 확인 중입니다.<br>
+          참고로 분임장 전언에 따르면 <b>마지막 주 발표는 PPT로 안 해도 되지만, PPT로 하면 일정 부분 가점</b>이 있다고 합니다.</p>
+        </div>
+        <div class="note-plain" style="margin-top:12px">9.17 단체 카톡 토의를 정리한 것입니다. 발언자는 참고용으로 표시했습니다.</div>
+      </div>
+    </details>
   </div>
 
   <div class="note-plain" style="margin-top:12px">
-    위 내용은 9.17 단체 카톡 토의를 정리한 것입니다. 발언자는 참고용으로 표시했습니다.
+    단체 카톡 대화와 첨부파일을 정리한 화면입니다. 전화번호·이메일 등 개인정보는 싣지 않습니다.
   </div>
 </div>
 
@@ -499,7 +704,7 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
       <li><b>현장학습비·숙박비 일괄 수령</b> 후 분임원에게 지급</li>
       <li>결강·조퇴·지각 사전 보고 접수</li>
     </ul>
-    <div class="orole">실무 13 방문지 섭외 · 14 동선·숙소 · 15 봉사 섭외</div>
+    <div class="orole">실무 14 동선·숙소(주) · 13 방문지 섭외 · 15 봉사 섭외</div>
   </article>
 
   <article class="offcard res">
@@ -604,7 +809,7 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
         <li><b>법령</b> 김수진(주)·조용수</li>
         <li><b>국내</b> 조용수(주)·이종근</li>
         <li><b>해외</b> 김민수(주)·조용수</li>
-        <li><b>면담</b> 홍병성(주)·정인희</li>
+        <li><b>면담</b> 정인희(주)·홍병성</li>
       </ul>
     </div>
     <div class="aicol">
@@ -834,23 +1039,24 @@ var EVENTS = [
     warn:"17:00 이후 저장분은 지연 — 5분당 0.1점씩, 최대 5점 감점.",
     kakao:"[7분임] 10.6(화) 13:00~17:00\n정책기획 평가보고서 (20점 상대평가)\n- 주제는 당일 12:55경 제시\n- AI 활용 금지 / 표지1+본문3쪽\n- 파일명: 교번_정책평가_성명\n- 17시 이후 저장분은 5분당 0.1점 감점" },
 
-  { m:10, d:7, t:"09:00", end:"18:00", kind:"trip", who:"분임 전원", pts:"1일차",
+  { m:10, d:7, t:"09:00", end:"15:00", kind:"trip", who:"분임 전원", pts:"1일차",
     title:"정책현장학습 출발",
     items:[
-      "09:00~09:30 국가인재원 집결·출발, 분임당 버스 1대(기사님 동행).",
-      "방문지 활동은 전원 함께(<b>소그룹 금지</b>), 시작 전·종료 후 단체사진 필수.",
-      "자유활동은 15:00 이후 가능. 제출한 방문경로는 당일 변경 불가.",
+      "09:00 국가인재원에서 <b>전원 출석체크 후</b> 버스 출발(현장 직행 불가).",
+      "11:00 통일동산 관광특구·국립파주민속박물관 → 12:00 오찬(주민·소상공인 조사) → 13:00 헤이리 관광안내소·평화누리길 → 14:00 오두산 통일전망대.",
+      "15:00 이후 안양 범계역 숙소로 이동, 자유시간. 기관 2곳 이상·전원 함께 이동, 출석은 전원 얼굴이 나온 사진으로 갈음.",
       "경비: 일비 12,500원 + 식비 25,000원 → 1인 75,000원(2일분)을 분임장에게 일괄 지급."
     ],
-    kakao:"[7분임] 10.7(수) 09:00 집결\n정책현장학습 출발 (1박2일)\n- 09:00~09:30 인재원 집결·출발\n- 방문지 소그룹 금지, 전원 함께\n- 활동 전/후 단체사진 필수\n- 자유활동은 15:00 이후" },
+    kakao:"[7분임] 10.7(수) 09:00 집결\n정책현장학습 출발 (1박2일)\n- 인재원 전원 출석체크 후 출발\n- 11시 통일동산·국립파주민속박물관\n- 14시 오두산 통일전망대\n- 15시 이후 범계역 숙소" },
 
-  { m:10, d:8, t:"09:30", end:"17:00", kind:"trip", who:"분임 전원", pts:"2일차",
+  { m:10, d:8, t:"09:00", end:"13:00", kind:"trip", who:"분임 전원", pts:"2일차",
     title:"사회봉사활동 후 복귀",
     items:[
-      "9:30~15:00 중 <b>4시간</b> 봉사활동. 여기도 시작 전·종료 후 단체사진 증빙 필수.",
-      "통근버스 시간을 고려해 <b>17시 전 인재원 도착</b>하도록 출발시간 설정."
+      "08:30 범계역에서 봉사기관으로 개별 이동(약 1.7km).",
+      "09:00~13:00 <b>안양시노인종합복지관</b> 가을바자회 봉사 4시간. 시작 전·종료 후 단체사진 증빙 필수.",
+      "13:00 소감 나누기 후 해산. 2일차는 종료 시각 제한이 없고 <b>개별 귀가 가능</b>(운영진 답변)."
     ],
-    kakao:"[7분임] 10.8(목)\n사회봉사활동 후 복귀\n- 9:30~15:00 중 4시간\n- 단체사진 증빙 필수\n- 17시 전 인재원 도착" },
+    kakao:"[7분임] 10.8(목)\n사회봉사활동\n- 08:30 복지관으로 개별 이동\n- 09~13시 안양시노인종합복지관 봉사\n- 단체사진 증빙 필수\n- 13시 이후 해산, 개별 귀가 가능" },
 
   { m:10, d:12, t:"14:00", kind:"due", who:"분임 공통", pts:"1점 P/F",
     title:"AI활용 실적서 + 발표자료 제출",
@@ -1063,7 +1269,7 @@ function icsStamp(){
 /* 일정 식별자는 날짜와 제목에서 만듭니다. 목록 순서가 바뀌어도 값이 그대로라,
    다시 받아도 기존 일정이 갱신될 뿐 새로 쌓이지 않습니다.
    일정 내용을 고칠 때는 ICS_VERSION을 1 올려 주세요. */
-var ICS_VERSION = 2;
+var ICS_VERSION = 3;
 function icsHash(str){
   var h = 5381;
   for (var i = 0; i < str.length; i++) h = ((h * 33) ^ str.charCodeAt(i)) >>> 0;
@@ -1270,7 +1476,7 @@ var ASSIGN = [
   { id:"r02", who:["119", "109"] },
   { id:"r03", who:["109", "115"] },
   { id:"r04", who:["122", "109"] },
-  { id:"r05", who:["114", "123"] },
+  { id:"r05", who:["123", "114"] },
   { id:"r06", who:["110", "119", "116"] },
   { id:"r07", who:["113", "117", "123"] },
   { id:"r08", who:["116", "110", "122"] },
@@ -1278,7 +1484,7 @@ var ASSIGN = [
   { id:"r10", who:["124"] },
   { id:"r11", who:["117", "113", "126"] },
   { id:"r12", who:["118"] },
-  { id:"r13", who:["112", "125"] },
+  { id:"r13", who:["125", "112"] },
   { id:"r14", who:["112", "120"] },
   { id:"r15", who:["121", "112"] },
   { id:"r16", who:["111", "114", "118", "121"] }
