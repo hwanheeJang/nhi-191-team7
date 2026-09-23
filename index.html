@@ -384,6 +384,52 @@ details.past[open] > summary{border-bottom:1px solid var(--rule)}
 details.past[open] .pi{background:var(--accent-soft); color:var(--accent); border-color:var(--accent)}
 details.past .pastbody{padding:0 12px 12px; opacity:.92}
 
+/* ───── 현장 ───── */
+.fbrief{margin-top:16px; background:var(--accent-soft); border-left:3px solid var(--accent);
+  border-radius:3px; padding:10px 12px; font-size:12.6px; color:var(--ink-2); line-height:1.65}
+.fbrief b{color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:12px; margin-right:3px}
+.fcard{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  box-shadow:var(--shadow); padding:12px 13px; margin-bottom:6px}
+.fq{margin-bottom:13px}
+.fq:last-child{margin-bottom:0}
+.fq > label{display:block; font-size:12.8px; font-weight:600; color:var(--ink); margin-bottom:5px; line-height:1.45}
+.fq > label em{font-style:normal; font-weight:400; font-size:11px; color:var(--muted); margin-left:5px}
+.fq select, .fq input[type="text"]{width:100%; box-sizing:border-box; font:inherit; font-size:13.5px;
+  padding:9px 10px; border:1px solid var(--rule); border-radius:3px;
+  background:var(--surface-2); color:var(--ink)}
+.fq select:disabled{opacity:.5}
+.fq input::placeholder{color:var(--muted)}
+.opts{display:flex; flex-wrap:wrap; gap:6px}
+.opts button{flex:1 1 auto; min-width:78px; font:inherit; font-size:12.8px; padding:8px 10px;
+  border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2);
+  border-radius:3px; cursor:pointer}
+.opts button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+.opts button:disabled{opacity:.45; cursor:default}
+.fsave{margin-top:14px; padding-top:12px; border-top:1px solid var(--rule-soft);
+  display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+.fhint{font-size:11.5px; color:var(--muted)}
+.fsum{display:grid; grid-template-columns:repeat(2,1fr); gap:7px; margin-bottom:10px}
+.fsum > div{background:var(--surface); border:1px solid var(--rule); border-radius:3px; padding:9px 10px}
+.fsum .t{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.05em; color:var(--muted)}
+.fsum .v{font-size:15px; font-weight:700; color:var(--ink); margin-top:2px}
+.fsum .v small{font-size:11.5px; font-weight:400; color:var(--muted); margin-left:3px}
+.fppl{background:var(--surface); border:1px solid var(--rule); border-radius:3px; overflow:hidden}
+.fppl .p{display:grid; grid-template-columns:34px 62px 1fr; gap:8px; align-items:center;
+  padding:8px 11px; border-bottom:1px solid var(--rule-soft); font-size:12.6px}
+.fppl .p:last-child{border-bottom:none}
+.fppl .p .g{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted)}
+.fppl .p .n{font-weight:600; color:var(--ink)}
+.fppl .p .s{color:var(--ink-2)}
+.fppl .p .s i{font-style:normal; display:inline-block; margin-right:5px; padding:1px 6px; border-radius:2px;
+  font-size:10.5px; font-family:"IBM Plex Mono",monospace}
+.fppl .p .s i.no{background:var(--surface-2); color:var(--muted)}
+.fppl .p .s i.stay{background:var(--accent-soft); color:var(--accent)}
+.fppl .p .s i.out{background:var(--gold-soft); color:var(--gold)}
+.fppl .p .s i.warn{background:var(--urgent-soft); color:var(--urgent)}
+.fppl .p.me{background:var(--accent-soft)}
+.air b span{font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--muted); margin-left:2px}
+.air u{text-decoration:none; font-size:11px; color:var(--urgent); font-family:"IBM Plex Mono",monospace}
+
 /* ───── AI 활용 ───── */
 .acct{background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--gold);
   border-radius:3px; box-shadow:var(--shadow); padding:12px 13px; margin-bottom:12px}
@@ -420,6 +466,8 @@ details.past .pastbody{padding:0 12px 12px; opacity:.92}
 .air > em::before{content:"증빙 "; font-family:"IBM Plex Mono",monospace;
   font-size:10px; color:var(--ok); font-weight:600}
 .air.chk > em::before{content:"검증 "; color:var(--urgent)}
+.aitbl.plain .air > em::before{content:""}
+.aitbl.plain .air{grid-template-columns:62px 1fr}
 .aicols{display:grid; gap:9px; margin-bottom:6px}
 .aicol{background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
   border-radius:3px; padding:11px 12px}
@@ -470,6 +518,7 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
     </div>
     <div class="vtabs" role="tablist">
       <button class="vtab" role="tab" id="vt-topic" aria-selected="true" aria-controls="view-topic">정책</button>
+      <button class="vtab" role="tab" id="vt-field" aria-selected="false" aria-controls="view-field">현장</button>
       <button class="vtab" role="tab" id="vt-duty" aria-selected="false" aria-controls="view-duty">분장</button>
       <button class="vtab" role="tab" id="vt-ai" aria-selected="false" aria-controls="view-ai">AI</button>
       <button class="vtab" role="tab" id="vt-cal" aria-selected="false" aria-controls="view-cal">일정</button>
@@ -690,6 +739,107 @@ footer{margin-top:34px; padding-top:15px; border-top:1px solid var(--rule); font
   <div class="note-plain" style="margin-top:12px">
     단체 카톡 대화와 첨부파일을 정리한 화면입니다. 전화번호·이메일 등 개인정보는 싣지 않습니다.
   </div>
+</div>
+
+<!-- ══════════ 현장 ══════════ -->
+<div class="wrap" id="view-field" role="tabpanel" aria-labelledby="vt-field" hidden>
+  <div class="fbrief">
+    <div><b>10.7(수)</b> 09:00 국가인재원 집결 → 통일동산 관광특구 → 오두산 통일전망대 → 15:00~ 범계역</div>
+    <div><b>10.8(목)</b> 08:30 범계역 6번출구 집합 → 복지관 도보 이동 → 09:00~13:00 봉사 → 13:30 버스로 진천 복귀</div>
+  </div>
+
+  <div class="sec-head"><h2>내 응답</h2><span id="fState">불러오는 중…</span></div>
+
+  <div class="fcard">
+    <div class="fq">
+      <label for="fWho">이름</label>
+      <select id="fWho" disabled><option value="">선택하세요</option></select>
+    </div>
+
+    <div id="fForm" hidden>
+      <div class="fq" data-k="stay">
+        <label>10.7(수) 숙박 <em>9.28(월) 12시</em></label>
+        <div class="opts"><button type="button" data-v="숙박">숙박</button><button type="button" data-v="비숙박">비숙박</button></div>
+      </div>
+
+      <div id="fStayOnly" hidden>
+        <div class="fq"><label for="fHotel">숙소명 <em>정확히 기재</em></label>
+          <input id="fHotel" type="text" maxlength="40" placeholder="예) 범계○○호텔 / 미정"></div>
+        <div class="fq" data-k="room">
+          <label>객실 형태 <em>인당 7만원 한도</em></label>
+          <div class="opts"><button type="button" data-v="1인실">1인실</button><button type="button" data-v="2인1실">2인1실</button><button type="button" data-v="3인1실">3인1실</button><button type="button" data-v="미정">미정</button></div>
+        </div>
+        <div class="fq"><label for="fMate">동실자</label>
+          <input id="fMate" type="text" maxlength="40" placeholder="같은 방 쓰실 분 (없으면 비워두세요)"></div>
+        <div class="fq" data-k="receipt">
+          <label>숙박 영수증 PDF 제출 <em>9.29(화) 18시 · 분임장 카톡</em></label>
+          <div class="opts"><button type="button" data-v="제출">제출함</button><button type="button" data-v="아직">아직</button></div>
+        </div>
+      </div>
+
+      <div class="fq" data-k="home7">
+        <label>10.7 파주 실습 후 바로 귀가 <em>원칙은 전원 범계역 이동 후 해산</em></label>
+        <div class="opts"><button type="button" data-v="아니오">아니오</button><button type="button" data-v="예">예, 바로 귀가</button></div>
+      </div>
+
+      <div class="fq" data-k="dinner">
+        <label>10.7 저녁식사 참가 <em>자율 · 1/n · 10.6(화) 18시</em></label>
+        <div class="opts"><button type="button" data-v="참가">참가</button><button type="button" data-v="불참">불참</button></div>
+      </div>
+
+      <div class="fq" data-k="home8">
+        <label>10.8 봉사 후 바로 귀가 <em>10.6(화)</em></label>
+        <div class="opts"><button type="button" data-v="아니오">아니오(버스 복귀)</button><button type="button" data-v="예">예, 바로 귀가</button></div>
+      </div>
+
+      <div class="fq" data-k="walk">
+        <label>범계역 → 복지관 도보 이동 <em>편도 1.7km · 약 2천보 · 횡단보도 4개</em></label>
+        <div class="opts"><button type="button" data-v="가능">가능</button><button type="button" data-v="곤란">곤란</button></div>
+      </div>
+      <div class="fq" id="fWalkOnly" hidden><label for="fWalkWhy">도보 곤란 사유 <em>곤란 시에만 · 택시 이동</em></label>
+        <input id="fWalkWhy" type="text" maxlength="60" placeholder="예) 무릎 수술 후 회복 중"></div>
+
+      <div class="fq"><label for="fNote">비고</label>
+        <input id="fNote" type="text" maxlength="60" placeholder="그 밖에 알릴 내용"></div>
+
+      <div class="fsave">
+        <button class="btn pri" id="fSave" disabled>저장</button>
+        <span class="fhint" id="fHint">고른 뒤 저장을 눌러 주세요.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head"><h2>분임 현황</h2><span id="fCount">–</span></div>
+  <div id="fSummary" class="fsum"></div>
+  <div id="fPeople" class="fppl"></div>
+  <div class="note-plain" style="margin-top:10px">
+    휴대전화와 계좌번호는 이 화면에서 받지 않습니다. 두 가지는 분임장에게 개별로 전달해 주세요.
+    <button class="btn sm ghost" id="fReload" style="margin-left:6px">새로고침</button>
+  </div>
+
+  <div class="sec-head"><h2>제출·회신 기한</h2><span>9.23 공지 기준</span></div>
+  <div class="aitbl plain">
+    <div class="air"><b>9.28 <span>월</span></b><span>10.7 숙박 여부 · 실습 후 바로 귀가 여부</span><em>분임장 회신 · 12:00</em></div>
+    <div class="air"><b>9.28 <span>월</span></b><span>출장비·숙박비 송금용 계좌</span><em>분임장 개별 전달 · 단톡방 공유 금지</em></div>
+    <div class="air"><b>9.28 <span>월</span></b><span>숙소 개별 예약 — 코칭 후 실습장소 확정 시</span><em>범계역 인근 · 인당 7만원 한도</em></div>
+    <div class="air"><b>9.29 <span>화</span></b><span>숙박 영수증 PDF 송부</span><em>분임장 카톡 · 18:00</em></div>
+    <div class="air"><b>9.30 <span>수</span></b><span>이동계획서 제출 <u>분임장</u></span><em>운영진 · 14:00 (버스 임차)</em></div>
+    <div class="air"><b>10.1 <span>목</span></b><span>현장실습 계획서 제출 <u>분임장</u></span><em>숙박 영수증 첨부해 일괄 제출</em></div>
+    <div class="air"><b>10.6 <span>화</span></b><span>10.8 봉사 후 바로 귀가 여부</span><em>분임장 통보</em></div>
+    <div class="air"><b>10.6 <span>화</span></b><span>10.7 저녁식사 참가 여부</span><em>분임장 통보 · 18:00</em></div>
+    <div class="air"><b>수시</b><span>범계역→복지관 도보 곤란 여부</span><em>사전 통보 · 곤란 시 택시</em></div>
+    <div class="air"><b>조속</b><span>9.17 저녁식사 비용 청구 <u>총무</u></span><em>주류비용은 주류테이블 4명 분담</em></div>
+  </div>
+
+  <article class="dcard warn" style="margin-top:12px">
+    <div class="dt">실습장소 변경 시 대안</div>
+    <p>① 평화누리길 4코스(행주산성 역사공원) &nbsp;② 경기관광공사(수원) &nbsp;③ 매향리평화기념관(화성)</p>
+  </article>
+
+  <article class="dcard" style="margin-top:10px">
+    <div class="dt">9.28(월) 코칭</div>
+    <p>15:00~15:50 분임 코칭. <b>연구장은 연구 관련 질문사항을 정리</b>해 두고, 코칭이 끝나 연구과제가 확정되면 서면질의 공문을 발송합니다.</p>
+  </article>
 </div>
 
 <!-- ══════════ 분장 ══════════ -->
@@ -1513,6 +1663,184 @@ function renderDuty(){
 /* ═══════════ 주제 투표 ═══════════ */
 
 
+/* ═══════════ 현장 (구글 시트 연동) ═══════════ */
+/* 응답을 주고받는 주소입니다. 시트를 새로 만들면 이 값만 바꾸면 됩니다. */
+var API_URL = "https://script.google.com/macros/s/AKfycbxRmN15lDz2C6qakdR_bkVjehhBYSQ51LXbMgXXGtLFBLtWw0wmRTN1h8qyS8HjMutLQQ/exec";
+
+var FKEYS = ["stay", "room", "receipt", "home7", "dinner", "home8", "walk"];  // 버튼형
+var FTEXT = { hotel: "fHotel", mate: "fMate", walkwhy: "fWalkWhy", note: "fNote" };
+var FROWS = [];        // 시트에서 읽어온 전체 응답
+var FLOADED = false;   // 다 불러오기 전에는 저장 버튼을 잠급니다
+var FANS = {};         // 지금 화면에서 고른 값
+
+function fEl(id){ return document.getElementById(id); }
+
+/* ── 이름 목록 ── */
+(function fillWho(){
+  var sel = fEl("fWho");
+  MEMBERS.forEach(function(m){
+    var o = document.createElement("option");
+    o.value = m.gb; o.textContent = m.name + " (" + m.gb + ")";
+    sel.appendChild(o);
+  });
+})();
+
+/* ── 버튼형 문항 ── */
+function fPaint(){
+  FKEYS.forEach(function(k){
+    var box = document.querySelector('#view-field .fq[data-k="' + k + '"]');
+    if (!box) return;
+    Array.prototype.forEach.call(box.querySelectorAll("button"), function(b){
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === FANS[k]));
+    });
+  });
+  fEl("fStayOnly").hidden = (FANS.stay !== "숙박");
+  fEl("fWalkOnly").hidden = (FANS.walk !== "곤란");
+}
+document.getElementById("view-field").addEventListener("click", function(ev){
+  var b = ev.target.closest('.fq[data-k] .opts button');
+  if (!b) return;
+  var k = b.closest(".fq").getAttribute("data-k");
+  FANS[k] = (FANS[k] === b.getAttribute("data-v")) ? "" : b.getAttribute("data-v");
+  fPaint();
+});
+
+/* ── 이름을 고르면 저장돼 있던 응답을 채웁니다 ── */
+function fLoadMine(){
+  var gb = fEl("fWho").value;
+  var has = !!gb;
+  fEl("fForm").hidden = !has;
+  if (!has) return;
+  var row = null;
+  for (var i = 0; i < FROWS.length; i++) if (FROWS[i].gb === gb) row = FROWS[i];
+  FANS = {};
+  FKEYS.forEach(function(k){ FANS[k] = row ? (row[k] || "") : ""; });
+  Object.keys(FTEXT).forEach(function(k){ fEl(FTEXT[k]).value = row ? (row[k] || "") : ""; });
+  fPaint();
+  fEl("fHint").textContent = row
+    ? "이미 저장된 응답이 있습니다. 고치고 저장을 누르면 바뀝니다."
+    : "고른 뒤 저장을 눌러 주세요.";
+  fRenderPeople();
+}
+fEl("fWho").addEventListener("change", fLoadMine);
+
+/* ── 저장 ── */
+fEl("fSave").addEventListener("click", function(){
+  var gb = fEl("fWho").value;
+  if (!gb) { toast("이름을 먼저 고르세요"); return; }
+  var name = "";
+  MEMBERS.forEach(function(m){ if (m.gb === gb) name = m.name; });
+  var payload = { gb: gb, name: name };
+  FKEYS.forEach(function(k){ payload[k] = FANS[k] || ""; });
+  Object.keys(FTEXT).forEach(function(k){ payload[k] = fEl(FTEXT[k]).value.trim(); });
+  if (payload.stay !== "숙박") { payload.hotel = ""; payload.room = ""; payload.mate = ""; payload.receipt = ""; }
+  if (payload.walk !== "곤란") { payload.walkwhy = ""; }
+
+  var btn = this;
+  btn.disabled = true; btn.textContent = "저장 중…";
+  fPost({ action: "save", payload: payload }).then(function(d){
+    if (!d || !d.ok) throw new Error(d && d.error ? d.error : "fail");
+    FROWS = d.rows || [];
+    fRender();
+    toast("저장했습니다");
+    fEl("fHint").textContent = "저장됐습니다. 언제든 다시 고칠 수 있습니다.";
+  }).catch(function(){
+    toast("저장하지 못했습니다. 잠시 뒤 다시 시도해 주세요");
+  }).then(function(){
+    btn.disabled = false; btn.textContent = "저장";
+  });
+});
+
+/* ── 통신 ── */
+function fGet(){
+  return fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.json(); });
+}
+function fPost(body){
+  // Content-Type을 지정하지 않아야 사전요청(preflight) 없이 전송됩니다.
+  return fetch(API_URL, { method: "POST", body: JSON.stringify(body) }).then(function(r){ return r.json(); });
+}
+
+/* ── 현황 그리기 ── */
+function fCount(fn){ var n = 0; FROWS.forEach(function(r){ if (fn(r)) n++; }); return n; }
+function fRenderSummary(){
+  var answered = fCount(function(r){ return r.stay || r.home7 || r.dinner || r.home8 || r.walk; });
+  var stay = fCount(function(r){ return r.stay === "숙박"; });
+  var out  = fCount(function(r){ return r.stay === "비숙박"; });
+  var rc   = fCount(function(r){ return r.stay === "숙박" && r.receipt === "제출"; });
+  var din  = fCount(function(r){ return r.dinner === "참가"; });
+  var h7   = fCount(function(r){ return r.home7 === "예"; });
+  var h8   = fCount(function(r){ return r.home8 === "예"; });
+  var wk   = fCount(function(r){ return r.walk === "곤란"; });
+  var cards = [
+    ["응답", answered + "<small>/ " + MEMBERS.length + "명</small>"],
+    ["10.7 숙박", stay + "<small>명 · 비숙박 " + out + "</small>"],
+    ["숙박 영수증", rc + "<small>/ " + stay + "명</small>"],
+    ["10.7 저녁식사", din + "<small>명 참가</small>"],
+    ["10.7 바로 귀가", h7 + "<small>명</small>"],
+    ["10.8 바로 귀가", h8 + "<small>명</small>"],
+    ["도보 곤란", wk + "<small>명</small>"],
+    ["숙박비 예상", (stay * 7) + "<small>만원 한도</small>"]
+  ];
+  fEl("fSummary").innerHTML = cards.map(function(c){
+    return '<div><div class="t">' + c[0] + '</div><div class="v">' + c[1] + "</div></div>";
+  }).join("");
+  fEl("fCount").textContent = answered + " / " + MEMBERS.length + "명 응답";
+}
+function fRenderPeople(){
+  var mine = fEl("fWho").value;
+  var html = MEMBERS.map(function(m){
+    var row = null;
+    for (var i = 0; i < FROWS.length; i++) if (FROWS[i].gb === m.gb) row = FROWS[i];
+    var tags = "";
+    if (!row || !(row.stay || row.home7 || row.dinner || row.home8 || row.walk)) {
+      tags = '<i class="no">미응답</i>';
+    } else {
+      if (row.stay === "숙박") tags += '<i class="stay">숙박</i>';
+      if (row.stay === "비숙박") tags += '<i class="out">비숙박</i>';
+      if (row.home7 === "예") tags += '<i class="out">10.7 귀가</i>';
+      if (row.dinner === "참가") tags += '<i class="stay">저녁</i>';
+      if (row.home8 === "예") tags += '<i class="out">10.8 귀가</i>';
+      if (row.walk === "곤란") tags += '<i class="warn">도보 곤란</i>';
+      if (row.stay === "숙박" && row.receipt !== "제출") tags += '<i class="warn">영수증</i>';
+    }
+    return '<div class="p' + (m.gb === mine ? " me" : "") + '">'
+      + '<span class="g">' + m.gb + "</span>"
+      + '<span class="n">' + m.name + "</span>"
+      + '<span class="s">' + tags + "</span></div>";
+  }).join("");
+  fEl("fPeople").innerHTML = html;
+}
+function fRender(){ fRenderSummary(); fRenderPeople(); }
+
+/* ── 불러오기 ── */
+function fLoad(quiet){
+  if (!API_URL) {
+    fEl("fState").textContent = "연결 설정 필요";
+    fEl("fHint").textContent = "관리자에게 문의해 주세요.";
+    return;
+  }
+  if (!quiet) fEl("fState").textContent = "불러오는 중…";
+  fGet().then(function(d){
+    if (!d || !d.ok) throw new Error("bad");
+    FROWS = d.rows || [];
+    FLOADED = true;
+    fEl("fWho").disabled = false;
+    fEl("fSave").disabled = false;
+    fEl("fState").textContent = "연결됨 " + new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+    fRender();
+    if (fEl("fWho").value) fLoadMine();
+  }).catch(function(){
+    if (!FLOADED) {
+      fEl("fState").textContent = "연결 안 됨";
+      fEl("fSummary").innerHTML = '<div style="grid-column:1/-1; font-size:12.5px; color:var(--muted)">현황을 불러오지 못했습니다. 새로고침을 눌러 주세요.</div>';
+    } else {
+      fEl("fState").textContent = "연결 끊김";
+    }
+  });
+}
+fEl("fReload").addEventListener("click", function(){ fLoad(false); });
+
+
 /* ═══════════ AI 활용 ═══════════ */
 var ACCT = { id: "nhi5191team7@gmail.com", pw: "nhiteam7!" };
 (function initAcct(){
@@ -1562,7 +1890,7 @@ var ACCT = { id: "nhi5191team7@gmail.com", pw: "nhiteam7!" };
 })();
 
 /* ═══════════ 뷰 전환 ═══════════ */
-var VIEWS = ["topic", "duty", "ai", "cal"];
+var VIEWS = ["topic", "field", "duty", "ai", "cal"];
 function showView(which){
   if (VIEWS.indexOf(which) < 0) which = "topic";
   VIEWS.forEach(function(v){
@@ -1574,6 +1902,12 @@ function showView(which){
 }
 VIEWS.forEach(function(v){
   document.getElementById("vt-" + v).addEventListener("click", function(){ showView(v); });
+});
+
+// 현장 탭은 처음 열 때 한 번, 그 뒤 다시 열면 조용히 새로고침합니다.
+var fFirst = true;
+document.getElementById("vt-field").addEventListener("click", function(){
+  fLoad(!fFirst); fFirst = false;
 });
 
 /* ═══════════ 시작 ═══════════ */
