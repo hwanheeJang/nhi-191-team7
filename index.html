@@ -1672,8 +1672,27 @@ var FTEXT = { hotel: "fHotel", mate: "fMate", walkwhy: "fWalkWhy", note: "fNote"
 var FROWS = [];        // 시트에서 읽어온 전체 응답
 var FLOADED = false;   // 다 불러오기 전에는 저장 버튼을 잠급니다
 var FANS = {};         // 지금 화면에서 고른 값
+var FCACHE = "t7.field";
+
+function fCacheSave(){ try{ localStorage.setItem(FCACHE, JSON.stringify({ at: Date.now(), rows: FROWS })); }catch(e){} }
+function fCacheLoad(){
+  try{
+    var raw = localStorage.getItem(FCACHE); if (!raw) return false;
+    var d = JSON.parse(raw); if (!d || !d.rows) return false;
+    FROWS = d.rows; fRender();
+    fEl("fState").textContent = "지난 기록 · 갱신 중…";
+    return true;
+  }catch(e){ return false; }
+}
 
 function fEl(id){ return document.getElementById(id); }
+
+// 명단(109~126)에 없는 줄은 무시합니다. 시트에 테스트 줄이 남아 있어도 현황이 틀어지지 않습니다.
+function fOnlyMembers(rows){
+  var ok = {};
+  MEMBERS.forEach(function(m){ ok[m.gb] = 1; });
+  return (rows || []).filter(function(r){ return r && ok[String(r.gb)]; });
+}
 
 /* ── 이름 목록 ── */
 (function fillWho(){
@@ -1740,7 +1759,8 @@ fEl("fSave").addEventListener("click", function(){
   btn.disabled = true; btn.textContent = "저장 중…";
   fPost({ action: "save", payload: payload }).then(function(d){
     if (!d || !d.ok) throw new Error(d && d.error ? d.error : "fail");
-    FROWS = d.rows || [];
+    FROWS = fOnlyMembers(d.rows);
+    fCacheSave();
     fRender();
     toast("저장했습니다");
     fEl("fHint").textContent = "저장됐습니다. 언제든 다시 고칠 수 있습니다.";
@@ -1752,8 +1772,16 @@ fEl("fSave").addEventListener("click", function(){
 });
 
 /* ── 통신 ── */
+function fTimeout(pr, ms){
+  return new Promise(function(res, rej){
+    var t = setTimeout(function(){ rej(new Error("timeout")); }, ms || 15000);
+    pr.then(function(v){ clearTimeout(t); res(v); }, function(e){ clearTimeout(t); rej(e); });
+  });
+}
 function fGet(){
-  return fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.json(); });
+  // 구글 서버가 잠들어 있으면 첫 응답이 느립니다. 한 번 실패하면 조용히 한 번 더 시도합니다.
+  var go = function(){ return fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.json(); }); };
+  return fTimeout(go(), 15000).catch(function(){ return fTimeout(go(), 20000); });
 }
 function fPost(body){
   // Content-Type을 지정하지 않아야 사전요청(preflight) 없이 전송됩니다.
@@ -1822,8 +1850,9 @@ function fLoad(quiet){
   if (!quiet) fEl("fState").textContent = "불러오는 중…";
   fGet().then(function(d){
     if (!d || !d.ok) throw new Error("bad");
-    FROWS = d.rows || [];
+    FROWS = fOnlyMembers(d.rows);
     FLOADED = true;
+    fCacheSave();
     fEl("fWho").disabled = false;
     fEl("fSave").disabled = false;
     fEl("fState").textContent = "연결됨 " + new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
@@ -1831,7 +1860,7 @@ function fLoad(quiet){
     if (fEl("fWho").value) fLoadMine();
   }).catch(function(){
     if (!FLOADED) {
-      fEl("fState").textContent = "연결 안 됨";
+      fEl("fState").textContent = "연결 안 됨 · 새로고침";
       fEl("fSummary").innerHTML = '<div style="grid-column:1/-1; font-size:12.5px; color:var(--muted)">현황을 불러오지 못했습니다. 새로고침을 눌러 주세요.</div>';
     } else {
       fEl("fState").textContent = "연결 끊김";
@@ -1904,10 +1933,11 @@ VIEWS.forEach(function(v){
   document.getElementById("vt-" + v).addEventListener("click", function(){ showView(v); });
 });
 
-// 현장 탭은 처음 열 때 한 번, 그 뒤 다시 열면 조용히 새로고침합니다.
-var fFirst = true;
+// 현장 탭을 누르기 전에 미리 불러둡니다(구글 서버 깨우기 포함).
+fCacheLoad();
+setTimeout(function(){ fLoad(true); }, 300);
 document.getElementById("vt-field").addEventListener("click", function(){
-  fLoad(!fFirst); fFirst = false;
+  if (!FLOADED) fLoad(true);   // 아직 안 왔으면 계속 기다립니다
 });
 
 /* ═══════════ 시작 ═══════════ */
